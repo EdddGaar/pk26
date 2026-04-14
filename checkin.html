@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Check-in Peque Recorre</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f4f7f9; margin: 0; padding: 20px; }
+        #video { width: 100%; max-width: 400px; border-radius: 15px; border: 5px solid #1D71B8; }
+        .status { padding: 15px; margin: 20px 0; border-radius: 10px; font-weight: bold; display: none; }
+        .btn { background: #E94E1B; color: white; padding: 20px; border-radius: 50px; border: none; width: 100%; font-size: 18px; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <img src="https://raw.githubusercontent.com/EdddGaar/pk26/0736f0bae6bb4aac915f93b67fad761692512464/Bannner.png" style="width:100%; max-width:400px;">
+    
+    <h2>CÁMARA DIRECTA 🏁</h2>
+    <div id="msg" class="status"></div>
+    
+    <video id="video" autoplay playsinline muted></video>
+    <canvas id="canvas" hidden></canvas>
+
+    <script>
+        const video = document.getElementById("video");
+        const msgDiv = document.getElementById("msg");
+        // PEGA AQUÍ TU URL DE EJECUCIÓN DE APPS SCRIPT (la que termina en /exec)
+        const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
+
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                video.srcObject = stream;
+                requestAnimationFrame(tick);
+            } catch (err) {
+                alert("Error de cámara en recorre.club: " + err.message);
+            }
+        }
+
+        function tick() {
+            if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                const canvas = document.getElementById("canvas");
+                const ctx = canvas.getContext("2d");
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, canvas.width, canvas.height);
+
+                if (code) {
+                    enviarDatos(code.data);
+                    return; // Detener escaneo tras éxito
+                }
+            }
+            requestAnimationFrame(tick);
+        }
+
+        function enviarDatos(qrValue) {
+            msgDiv.style.display = "block";
+            msgDiv.style.background = "#eee";
+            msgDiv.innerText = "Enviando a Google Sheets...";
+
+            fetch(WEB_APP_URL, {
+                method: "POST",
+                mode: "no-cors", // Crucial para Google Apps Script
+                body: JSON.stringify({ qrValue: qrValue })
+            })
+            .then(() => {
+                msgDiv.style.background = "#d4edda";
+                msgDiv.innerText = "✅ ENVIADO: " + qrValue;
+                setTimeout(() => location.reload(), 3000); // Reiniciar para el siguiente
+            })
+            .catch(err => {
+                msgDiv.style.background = "#f8d7da";
+                msgDiv.innerText = "❌ ERROR: " + err;
+            });
+        }
+
+        startCamera();
+    </script>
+</body>
+</html>
