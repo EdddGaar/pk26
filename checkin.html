@@ -3,120 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Check-in Peque Recorre</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Peque Recorre Check-in</title>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
-        :root { --azul: #1D71B8; --naranja: #E94E1B; }
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: #f4f7f9; text-align: center; color: #333; }
-        .header-img { width: 100%; max-width: 500px; border-radius: 0 0 30px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: block; margin: 0 auto; }
-        .container { padding: 20px; max-width: 500px; margin: auto; }
-        h1 { color: var(--azul); font-weight: 900; font-size: 22px; margin: 15px 0; }
-        input { padding: 15px; width: 100%; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; margin-bottom: 10px; outline: none; text-align: center; box-sizing: border-box; }
-        .btn { background: var(--azul); color: white; padding: 15px; border-radius: 50px; border: none; font-weight: bold; width: 100%; font-size: 16px; margin: 5px 0; cursor: pointer; }
-        .btn-qr { background: var(--naranja); }
-        #result { margin-top: 20px; padding: 15px; border-radius: 15px; font-weight: bold; display: none; min-height: 50px; }
-        .ok { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .warn { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .multiple { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
-        .lista-seleccion { list-style: none; padding: 0; margin: 10px 0; }
-        .item-runner { background: white; border: 2px solid var(--azul); padding: 12px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; color: var(--azul); font-weight: bold; text-align: left; }
-        #video { width: 100%; max-width: 400px; border-radius: 20px; border: 5px solid var(--azul); display: none; margin: 20px auto; background: #000; }
+        body { font-family: sans-serif; text-align: center; background: #f4f7f9; margin: 0; padding: 20px; }
+        .btn { background: #1D71B8; color: white; padding: 15px; border-radius: 50px; border: none; width: 100%; font-size: 18px; font-weight: bold; margin-bottom: 10px; cursor: pointer; }
+        #video { width: 100%; max-width: 400px; border-radius: 15px; border: 5px solid #1D71B8; display: none; margin: auto; }
+        #result { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; display: none; }
+        .ok { background: #d4edda; color: #155724; }
+        .warn { background: #fff3cd; color: #856404; }
+        .error { background: #f8d7da; color: #721c24; }
+        .item { background: white; border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <img src="https://raw.githubusercontent.com/EdddGaar/pk26/0736f0bae6bb4aac915f93b67fad761692512464/Bannner.png" class="header-img">
-    <div class="container">
-        <h1>STAFF CHECK-IN 🏁</h1>
-        <input type="text" id="searchInput" placeholder="Nombre o Folio">
-        <button class="btn" onclick="ejecutarCheckIn(document.getElementById('searchInput').value)">🔍 BUSCAR</button>
-        <button class="btn btn-qr" id="qrBtn" onclick="toggleScanner()">📷 ESCANEAR QR</button>
-        <div id="result"></div>
-        <video id="video" autoplay playsinline muted></video>
-    </div>
+    <h2>PEQUE RECORRE 🏁</h2>
+    <input type="text" id="busqueda" placeholder="Nombre o Folio" style="padding:15px; width:80%; border-radius:50px; border:1px solid #ccc; margin-bottom:10px;">
+    <button class="btn" onclick="consultar(document.getElementById('busqueda').value)">🔍 BUSCAR</button>
+    <button class="btn" style="background:#E94E1B" onclick="encenderCamara()">📷 ESCANEAR QR</button>
+    
+    <div id="result"></div>
+    <video id="video" playsinline></video>
 
     <script>
-        // --- ⚙️ PEGA TU URL /exec AQUÍ ---
-        const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
+        const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; // REEMPLAZA ESTO
 
-        function ejecutarCheckIn(valor) {
-            if(!valor) return;
+        function consultar(valor) {
+            if (!valor) return;
             const resDiv = document.getElementById("result");
             resDiv.style.display = "block";
-            resDiv.className = "multiple";
-            resDiv.innerHTML = "⏳ Consultando base de datos...";
-
-            // Limpiar scripts anteriores para no saturar el DOM
-            const oldScript = document.getElementById('jsonp-script');
-            if (oldScript) oldScript.remove();
-
-            // Timeout por si Google no responde
-            const timer = setTimeout(() => {
-                resDiv.className = "error";
-                resDiv.innerHTML = "❌ Tiempo de espera agotado. Revisa tu conexión o la URL de Apps Script.";
-            }, 8000);
-
-            // Crear el puente JSONP
-            window.procesarRespuesta = function(res) {
-                clearTimeout(timer); // Cancelar el aviso de error
-                resDiv.className = res.status;
-                
-                if (res.status === "multiple") {
-                    let html = "<p>👥 Varios encontrados:</p><ul class='lista-seleccion'>";
-                    res.data.forEach(r => {
-                        html += `<li class="item-runner" onclick="ejecutarCheckIn('${r.folio}')">
-                            ${r.nombre}<br><small>Folio: ${r.folio} | Cat: ${r.categoria}</small>
-                        </li>`;
-                    });
-                    resDiv.innerHTML = html + "</ul>";
-                } else {
-                    resDiv.innerHTML = res.msg.replace(/\n/g, "<br>");
-                    if(res.status === "ok") {
-                        document.getElementById('searchInput').value = "";
-                        if(window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
-                    }
-                }
-            };
+            resDiv.className = "warn";
+            resDiv.innerHTML = "⏳ Consultando...";
 
             const script = document.createElement('script');
-            script.id = 'jsonp-script';
-            script.src = `${WEB_APP_URL}?valor=${encodeURIComponent(valor)}&callback=procesarRespuesta`;
+            script.src = `${WEB_APP_URL}?valor=${encodeURIComponent(valor)}&callback=respuesta`;
             document.body.appendChild(script);
         }
 
-        // --- Lógica de Cámara (jsQR integrada) ---
-        let scanning = false;
-        let video = document.getElementById("video");
-        let streamRef = null;
-
-        async function toggleScanner() {
-            if (scanning) { stopScan(); return; }
-            try {
-                const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                streamRef = s; video.srcObject = s; video.style.display = "block";
-                scanning = true; document.getElementById("qrBtn").innerText = "⏹️ DETENER";
-                video.play(); requestAnimationFrame(scanFrame);
-            } catch (e) { alert("⚠️ Sin acceso a cámara."); }
-        }
-
-        function stopScan() {
-            scanning = false; video.style.display = "none";
-            if(streamRef) streamRef.getTracks().forEach(t => t.stop());
-            document.getElementById("qrBtn").innerText = "📷 ESCANEAR QR";
-        }
-
-        function scanFrame() {
-            if (!scanning) return;
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                const canvas = document.createElement("canvas");
-                const ctx = canvas.getContext("2d");
-                canvas.width = video.videoWidth; canvas.height = video.videoHeight;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
-                if (code) { stopScan(); ejecutarCheckIn(code.data); }
+        window.respuesta = function(res) {
+            const resDiv = document.getElementById("result");
+            resDiv.className = res.status;
+            if (res.status === "multiple") {
+                let html = "Selecciona:<br>";
+                res.data.forEach(r => {
+                    html += `<div class="item" onclick="consultar('${r.nombre}')">${r.nombre} (${r.categoria})</div>`;
+                });
+                resDiv.innerHTML = html;
+            } else {
+                resDiv.innerHTML = res.msg;
+                if(res.status === "ok") document.getElementById("busqueda").value = "";
             }
-            requestAnimationFrame(scanFrame);
+        };
+
+        function encenderCamara() {
+            const v = document.getElementById("video");
+            v.style.display = "block";
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(s => {
+                v.srcObject = s;
+                v.play();
+                requestAnimationFrame(tick);
+            });
+        }
+
+        function tick() {
+            const v = document.getElementById("video");
+            if (v.readyState === v.HAVE_ENOUGH_DATA) {
+                const canvas = document.createElement("canvas");
+                canvas.width = v.videoWidth; canvas.height = v.videoHeight;
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(v, 0, 0);
+                const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+                if (code) {
+                    v.srcObject.getTracks().forEach(t => t.stop());
+                    v.style.display = "none";
+                    consultar(code.data);
+                    return;
+                }
+            }
+            requestAnimationFrame(tick);
         }
     </script>
 </body>
