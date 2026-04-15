@@ -8,21 +8,21 @@
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
         :root { --azul: #1D71B8; --naranja: #E94E1B; }
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: #f4f7f9; text-align: center; color: #333; padding-bottom: 50px; }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; background: #f4f7f9; text-align: center; color: #333; }
         .header-img { width: 100%; max-width: 500px; border-radius: 0 0 30px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: block; margin: 0 auto; }
         .container { padding: 20px; max-width: 500px; margin: auto; }
         h1 { color: var(--azul); font-weight: 900; font-size: 22px; margin: 15px 0; }
         input { padding: 15px; width: 100%; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; margin-bottom: 10px; outline: none; text-align: center; box-sizing: border-box; }
         .btn { background: var(--azul); color: white; padding: 15px; border-radius: 50px; border: none; font-weight: bold; width: 100%; font-size: 16px; margin: 5px 0; cursor: pointer; }
         .btn-qr { background: var(--naranja); }
-        #video { width: 100%; max-width: 400px; border-radius: 20px; border: 5px solid var(--azul); display: none; margin: 20px auto; background: #000; }
         #result { margin-top: 20px; padding: 15px; border-radius: 15px; font-weight: bold; display: none; min-height: 50px; }
         .ok { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .warn { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
         .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .multiple { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
-        .lista-seleccion { list-style: none; padding: 0; margin-top: 10px; }
+        .lista-seleccion { list-style: none; padding: 0; margin: 10px 0; }
         .item-runner { background: white; border: 2px solid var(--azul); padding: 12px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; color: var(--azul); font-weight: bold; text-align: left; }
+        #video { width: 100%; max-width: 400px; border-radius: 20px; border: 5px solid var(--azul); display: none; margin: 20px auto; background: #000; }
     </style>
 </head>
 <body>
@@ -34,11 +34,10 @@
         <button class="btn btn-qr" id="qrBtn" onclick="toggleScanner()">📷 ESCANEAR QR</button>
         <div id="result"></div>
         <video id="video" autoplay playsinline muted></video>
-        <canvas id="canvas" hidden></canvas>
     </div>
 
     <script>
-        // --- ⚙️ PEGA AQUÍ TU URL DE APPS SCRIPT ---
+        // --- ⚙️ PEGA TU URL /exec AQUÍ ---
         const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
 
         function ejecutarCheckIn(valor) {
@@ -46,38 +45,47 @@
             const resDiv = document.getElementById("result");
             resDiv.style.display = "block";
             resDiv.className = "multiple";
-            resDiv.innerHTML = "⏳ Consultando...";
+            resDiv.innerHTML = "⏳ Consultando base de datos...";
 
-            // Técnica JSONP para evitar errores de conexión
+            // Limpiar scripts anteriores para no saturar el DOM
+            const oldScript = document.getElementById('jsonp-script');
+            if (oldScript) oldScript.remove();
+
+            // Timeout por si Google no responde
+            const timer = setTimeout(() => {
+                resDiv.className = "error";
+                resDiv.innerHTML = "❌ Tiempo de espera agotado. Revisa tu conexión o la URL de Apps Script.";
+            }, 8000);
+
+            // Crear el puente JSONP
+            window.procesarRespuesta = function(res) {
+                clearTimeout(timer); // Cancelar el aviso de error
+                resDiv.className = res.status;
+                
+                if (res.status === "multiple") {
+                    let html = "<p>👥 Varios encontrados:</p><ul class='lista-seleccion'>";
+                    res.data.forEach(r => {
+                        html += `<li class="item-runner" onclick="ejecutarCheckIn('${r.folio}')">
+                            ${r.nombre}<br><small>Folio: ${r.folio} | Cat: ${r.categoria}</small>
+                        </li>`;
+                    });
+                    resDiv.innerHTML = html + "</ul>";
+                } else {
+                    resDiv.innerHTML = res.msg.replace(/\n/g, "<br>");
+                    if(res.status === "ok") {
+                        document.getElementById('searchInput').value = "";
+                        if(window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
+                    }
+                }
+            };
+
             const script = document.createElement('script');
+            script.id = 'jsonp-script';
             script.src = `${WEB_APP_URL}?valor=${encodeURIComponent(valor)}&callback=procesarRespuesta`;
             document.body.appendChild(script);
-            document.body.removeChild(script);
         }
 
-        // Esta función recibe la respuesta desde Google
-        window.procesarRespuesta = function(res) {
-            const resDiv = document.getElementById("result");
-            resDiv.className = res.status;
-            
-            if (res.status === "multiple") {
-                let html = "<p>👥 Se encontraron varios:</p><ul class='lista-seleccion'>";
-                res.data.forEach(r => {
-                    html += `<li class="item-runner" onclick="ejecutarCheckIn('${r.folio}')">
-                        ${r.nombre}<br><small>Folio: ${r.folio} | Cat: ${r.categoria}</small>
-                    </li>`;
-                });
-                resDiv.innerHTML = html + "</ul>";
-            } else {
-                resDiv.innerHTML = res.msg.replace(/\n/g, "<br>");
-                if(res.status === "ok") {
-                    document.getElementById('searchInput').value = "";
-                    if(window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
-                }
-            }
-        };
-
-        // --- Lógica de Cámara ---
+        // --- Lógica de Cámara (jsQR integrada) ---
         let scanning = false;
         let video = document.getElementById("video");
         let streamRef = null;
@@ -89,7 +97,7 @@
                 streamRef = s; video.srcObject = s; video.style.display = "block";
                 scanning = true; document.getElementById("qrBtn").innerText = "⏹️ DETENER";
                 video.play(); requestAnimationFrame(scanFrame);
-            } catch (e) { alert("⚠️ Error de cámara."); }
+            } catch (e) { alert("⚠️ Sin acceso a cámara."); }
         }
 
         function stopScan() {
@@ -101,7 +109,7 @@
         function scanFrame() {
             if (!scanning) return;
             if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                const canvas = document.getElementById("canvas") || document.createElement("canvas");
+                const canvas = document.createElement("canvas");
                 const ctx = canvas.getContext("2d");
                 canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
