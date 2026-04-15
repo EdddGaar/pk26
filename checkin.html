@@ -3,69 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Peque Recorre Check-in</title>
+    <title>Check-in Peque Recorre</title>
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f4f7f9; margin: 0; padding: 20px; }
-        .btn { background: #1D71B8; color: white; padding: 15px; border-radius: 50px; border: none; width: 100%; font-size: 18px; font-weight: bold; margin-bottom: 10px; cursor: pointer; }
-        #video { width: 100%; max-width: 400px; border-radius: 15px; border: 5px solid #1D71B8; display: none; margin: auto; }
-        #result { margin-top: 20px; padding: 15px; border-radius: 10px; font-weight: bold; display: none; }
+        body { font-family: sans-serif; text-align: center; background: #f0f4f8; margin: 0; padding: 20px; color: #333; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 450px; margin: auto; }
+        .btn { padding: 15px; border-radius: 50px; border: none; width: 100%; font-size: 16px; font-weight: bold; cursor: pointer; margin: 5px 0; color: white; }
+        .btn-azul { background: #1D71B8; }
+        .btn-naranja { background: #E94E1B; }
+        input { padding: 15px; width: 90%; border-radius: 50px; border: 1px solid #ccc; margin-bottom: 15px; text-align: center; font-size: 16px; }
+        #video { width: 100%; max-width: 350px; border-radius: 15px; border: 4px solid #1D71B8; display: none; margin: 15px auto; }
+        #msg { padding: 15px; border-radius: 10px; font-weight: bold; display: none; margin-top: 15px; }
         .ok { background: #d4edda; color: #155724; }
         .warn { background: #fff3cd; color: #856404; }
         .error { background: #f8d7da; color: #721c24; }
-        .item { background: white; border: 1px solid #ccc; padding: 10px; margin: 5px; border-radius: 8px; cursor: pointer; }
+        .item-lista { background: #fff; border: 1px solid #1D71B8; padding: 10px; margin: 5px 0; border-radius: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <h2>PEQUE RECORRE 🏁</h2>
-    <input type="text" id="busqueda" placeholder="Nombre o Folio" style="padding:15px; width:80%; border-radius:50px; border:1px solid #ccc; margin-bottom:10px;">
-    <button class="btn" onclick="consultar(document.getElementById('busqueda').value)">🔍 BUSCAR</button>
-    <button class="btn" style="background:#E94E1B" onclick="encenderCamara()">📷 ESCANEAR QR</button>
-    
-    <div id="result"></div>
-    <video id="video" playsinline></video>
+    <div class="card">
+        <h2 style="color:#1D71B8">PEQUE RECORRE 🏁</h2>
+        <input type="text" id="busqueda" placeholder="Nombre o Folio">
+        <button class="btn btn-azul" onclick="buscar(document.getElementById('busqueda').value)">🔍 BUSCAR</button>
+        <button class="btn btn-naranja" onclick="iniciarCamara()">📷 ESCANEAR QR</button>
+        
+        <video id="video" playsinline></video>
+        <div id="msg"></div>
+    </div>
 
     <script>
-        const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; // REEMPLAZA ESTO
+        // --- ⚙️ PEGA TU URL DE APPS SCRIPT AQUÍ ---
+        const URL_SCRIPT = "TU_URL_DE_APPS_SCRIPT_AQUI";
 
-        function consultar(valor) {
+        function buscar(valor) {
             if (!valor) return;
-            const resDiv = document.getElementById("result");
-            resDiv.style.display = "block";
-            resDiv.className = "warn";
-            resDiv.innerHTML = "⏳ Consultando...";
+            const msg = document.getElementById("msg");
+            msg.style.display = "block";
+            msg.className = "warn";
+            msg.innerHTML = "⏳ Consultando base de datos...";
 
-            const script = document.createElement('script');
-            script.src = `${WEB_APP_URL}?valor=${encodeURIComponent(valor)}&callback=respuesta`;
-            document.body.appendChild(script);
+            const s = document.createElement('script');
+            s.src = `${URL_SCRIPT}?valor=${encodeURIComponent(valor)}&callback=callbackCheckIn`;
+            document.body.appendChild(s);
+            document.body.removeChild(s);
         }
 
-        window.respuesta = function(res) {
-            const resDiv = document.getElementById("result");
-            resDiv.className = res.status;
+        window.callbackCheckIn = function(res) {
+            const msg = document.getElementById("msg");
+            msg.className = res.status;
             if (res.status === "multiple") {
-                let html = "Selecciona:<br>";
+                let list = "<b>Varios encontrados:</b><br>";
                 res.data.forEach(r => {
-                    html += `<div class="item" onclick="consultar('${r.nombre}')">${r.nombre} (${r.categoria})</div>`;
+                    list += `<div class="item-lista" onclick="buscar('${r.nombre}')">${r.nombre}<br><small>${r.categoria}</small></div>`;
                 });
-                resDiv.innerHTML = html;
+                msg.innerHTML = list;
             } else {
-                resDiv.innerHTML = res.msg;
-                if(res.status === "ok") document.getElementById("busqueda").value = "";
+                msg.innerHTML = res.msg;
+                if(res.status === "ok") {
+                    document.getElementById("busqueda").value = "";
+                    if(navigator.vibrate) navigator.vibrate(200);
+                }
             }
         };
 
-        function encenderCamara() {
+        function iniciarCamara() {
             const v = document.getElementById("video");
             v.style.display = "block";
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(s => {
-                v.srcObject = s;
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(stream => {
+                v.srcObject = stream;
                 v.play();
-                requestAnimationFrame(tick);
+                requestAnimationFrame(escanear);
             });
         }
 
-        function tick() {
+        function escanear() {
             const v = document.getElementById("video");
             if (v.readyState === v.HAVE_ENOUGH_DATA) {
                 const canvas = document.createElement("canvas");
@@ -76,11 +87,11 @@
                 if (code) {
                     v.srcObject.getTracks().forEach(t => t.stop());
                     v.style.display = "none";
-                    consultar(code.data);
+                    buscar(code.data);
                     return;
                 }
             }
-            requestAnimationFrame(tick);
+            requestAnimationFrame(escanear);
         }
     </script>
 </body>
