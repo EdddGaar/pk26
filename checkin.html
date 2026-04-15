@@ -3,147 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Staff Check-in Peque Recorre</title>
+    <title>Check-in Peque Recorre</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
     <style>
         :root { --azul: #1D71B8; --naranja: #E94E1B; }
-        body { font-family: 'Montserrat', sans-serif; margin: 0; background: #f4f7f9; text-align: center; color: #333; padding-bottom: 40px; }
+        body { font-family: 'Montserrat', sans-serif; margin: 0; background: #f4f7f9; text-align: center; color: #333; padding-bottom: 50px; }
         .header-img { width: 100%; max-width: 500px; border-radius: 0 0 30px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: block; margin: 0 auto; }
         .container { padding: 20px; max-width: 500px; margin: auto; }
         h1 { color: var(--azul); font-weight: 900; font-size: 22px; margin: 15px 0; }
-        
-        /* Inputs y Botones */
-        .input-group { margin-bottom: 20px; }
-        input { padding: 15px; width: 100%; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; outline: none; text-align: center; box-sizing: border-box; font-family: inherit; }
-        .btn { background: var(--azul); color: white; padding: 15px; border-radius: 50px; border: none; font-weight: bold; width: 100%; font-size: 16px; margin: 5px 0; cursor: pointer; transition: 0.3s; }
-        .btn-qr { background: var(--naranja); margin-top: 10px; }
-        
-        /* Cámara y Resultados */
+        input { padding: 15px; width: 100%; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; margin-bottom: 10px; outline: none; text-align: center; box-sizing: border-box; }
+        .btn { background: var(--azul); color: white; padding: 15px; border-radius: 50px; border: none; font-weight: bold; width: 100%; font-size: 16px; margin: 5px 0; cursor: pointer; }
+        .btn-qr { background: var(--naranja); }
         #video { width: 100%; max-width: 400px; border-radius: 20px; border: 5px solid var(--azul); display: none; margin: 20px auto; background: #000; }
-        .status-box { padding: 15px; margin: 20px 0; border-radius: 15px; font-weight: bold; display: none; }
-        
-        /* Colores de Respuesta */
-        .sending { background: #eee; color: #666; }
+        #result { margin-top: 20px; padding: 15px; border-radius: 15px; font-weight: bold; display: none; min-height: 50px; }
         .ok { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .warn { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
         .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        
+        .multiple { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        .lista-seleccion { list-style: none; padding: 0; margin-top: 10px; }
+        .item-runner { background: white; border: 2px solid var(--azul); padding: 12px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; color: var(--azul); font-weight: bold; text-align: left; }
         footer { margin-top: 30px; font-size: 11px; color: #888; }
     </style>
 </head>
 <body>
-
     <img src="https://raw.githubusercontent.com/EdddGaar/pk26/0736f0bae6bb4aac915f93b67fad761692512464/Bannner.png" class="header-img">
     
     <div class="container">
         <h1>STAFF CHECK-IN 🏁</h1>
+        <input type="text" id="searchInput" placeholder="Nombre o Folio">
+        <button class="btn" onclick="ejecutarCheckIn(document.getElementById('searchInput').value)">🔍 BUSCAR</button>
+        <button class="btn btn-qr" id="qrBtn" onclick="toggleScanner()">📷 ESCANEAR QR</button>
         
-        <div class="input-group">
-            <input type="text" id="searchInput" placeholder="Escribe Nombre o Folio">
-            <button class="btn" onclick="enviarAlServidor(document.getElementById('searchInput').value)">🔍 BUSCAR Y REGISTRAR</button>
-        </div>
-
-        <button class="btn btn-qr" id="qrBtn" onclick="toggleScanner()">📷 ESCANEAR CÓDIGO QR</button>
-        
-        <div id="status" class="status-box"></div>
-        
+        <div id="result"></div>
         <video id="video" autoplay playsinline muted></video>
         <canvas id="canvas" hidden></canvas>
-        
-        <footer>© 2026 RE-CORRE TOLUCA | PEQUE RECORRE</footer>
     </div>
+    <footer>© 2026 RE-CORRE TOLUCA</footer>
 
     <script>
-        // --- ⚙️ CONFIGURACIÓN ---
-        // REEMPLAZA ESTO CON TU URL DE APPS SCRIPT (LA QUE TERMINA EN /exec)
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz_XXXXXXXXX/exec"; 
+        // --- ⚙️ PEGA AQUÍ TU URL DE APPS SCRIPT ---
+        const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
 
-        const video = document.getElementById("video");
-        const statusDiv = document.getElementById("status");
-        const qrBtn = document.getElementById("qrBtn");
         let scanning = false;
+        let video = document.getElementById("video");
+        let resDiv = document.getElementById("result");
         let streamRef = null;
 
-        // --- 🚀 ENVÍO DE DATOS ---
-        async function enviarAlServidor(valor) {
-            if (!valor) return;
-            
-            // Mostrar estado de carga
-            statusDiv.style.display = "block";
-            statusDiv.className = "status-box sending";
-            statusDiv.innerHTML = "⏳ Procesando registro...";
+        async function ejecutarCheckIn(valor) {
+            if(!valor) return;
+            resDiv.style.display = "block";
+            resDiv.className = "multiple";
+            resDiv.innerHTML = "⏳ CONECTANDO CON LA BASE DE DATOS...";
 
             try {
-                // Usamos POST con no-cors para saltar bloqueos de seguridad
-                await fetch(WEB_APP_URL, {
+                // Usamos fetch directo. Apps Script redirigirá, el navegador lo manejará.
+                const response = await fetch(WEB_APP_URL, {
                     method: "POST",
-                    mode: "no-cors",
-                    cache: "no-cache",
                     body: JSON.stringify({ valor: valor })
                 });
 
-                // Como es no-cors, el navegador no nos deja leer la respuesta de Google,
-                // pero si el fetch no falla, es que se envió correctamente.
-                statusDiv.className = "status-box ok";
-                statusDiv.innerHTML = "✅ PETICIÓN ENVIADA<br><small>Folio: " + valor.toUpperCase() + "<br>Revisa el Sheets para confirmar.</small>";
+                const res = await response.json();
                 
-                // Limpiar input y vibrar (si el cel lo permite)
-                document.getElementById('searchInput').value = "";
-                if (window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
-                
+                resDiv.className = res.status;
+                if (res.status === "multiple") {
+                    let html = "<p>👥 Se encontraron varios. Selecciona el correcto:</p><ul class='lista-seleccion'>";
+                    res.data.forEach(r => {
+                        html += `<li class="item-runner" onclick="ejecutarCheckIn('${r.folio}')">
+                            ${r.nombre}<br><small>Folio: ${r.folio} | Cat: ${r.categoria}</small>
+                        </li>`;
+                    });
+                    resDiv.innerHTML = html + "</ul>";
+                } else {
+                    resDiv.innerHTML = res.msg.replace(/\n/g, "<br>");
+                    if(res.status === "ok") {
+                        document.getElementById('searchInput').value = "";
+                        if(window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
+                    }
+                }
             } catch (err) {
-                statusDiv.className = "status-box error";
-                statusDiv.innerHTML = "❌ ERROR DE CONEXIÓN";
+                resDiv.className = "error";
+                resDiv.innerHTML = "❌ ERROR: No se pudo conectar. Verifica que la App Script esté publicada como 'Anyone'.";
                 console.error(err);
             }
         }
 
-        // --- 📷 LÓGICA DE CÁMARA ---
         async function toggleScanner() {
             if (scanning) { stopScan(); return; }
-            
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                streamRef = stream;
-                video.srcObject = stream;
-                video.style.display = "block";
-                qrBtn.innerText = "⏹️ DETENER CÁMARA";
-                qrBtn.style.background = "#333";
-                scanning = true;
-                video.play();
-                requestAnimationFrame(tick);
-            } catch (err) {
-                alert("⚠️ Error de cámara: Asegúrate de usar HTTPS y dar permisos.");
-            }
+                const s = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                streamRef = s; video.srcObject = s; video.style.display = "block";
+                scanning = true; document.getElementById("qrBtn").innerText = "⏹️ DETENER";
+                video.play(); requestAnimationFrame(scanFrame);
+            } catch (e) { alert("⚠️ Error de cámara: Asegúrate de dar permisos."); }
         }
 
         function stopScan() {
-            scanning = false;
-            video.style.display = "none";
-            qrBtn.innerText = "📷 ESCANEAR CÓDIGO QR";
-            qrBtn.style.background = "var(--naranja)";
-            if (streamRef) streamRef.getTracks().forEach(t => t.stop());
+            scanning = false; video.style.display = "none";
+            if(streamRef) streamRef.getTracks().forEach(t => t.stop());
+            document.getElementById("qrBtn").innerText = "📷 ESCANEAR QR";
         }
 
-        function tick() {
+        function scanFrame() {
             if (!scanning) return;
             if (video.readyState === video.HAVE_ENOUGH_DATA) {
                 const canvas = document.getElementById("canvas");
                 const ctx = canvas.getContext("2d");
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
+                canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const code = jsQR(imageData.data, canvas.width, canvas.height);
-
-                if (code) {
-                    stopScan();
-                    enviarAlServidor(code.data);
-                    return;
-                }
+                const code = jsQR(ctx.getImageData(0, 0, canvas.width, canvas.height).data, canvas.width, canvas.height);
+                if (code) { stopScan(); ejecutarCheckIn(code.data); }
             }
-            requestAnimationFrame(tick);
+            requestAnimationFrame(scanFrame);
         }
     </script>
 </body>
