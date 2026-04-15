@@ -14,6 +14,7 @@
             --azul: #1D71B8;
             --naranja: #E94E1B;
             --celeste: #5BC0BE;
+            --amarillo: #F1C40F; /* Color Lego */
             --fondo: #ffffff;
             --whatsapp: #25D366;
             --fb-blue: #1877F2;
@@ -42,7 +43,7 @@
         /* Navbar estilo CDMX con Logo */
         nav {
             background: white;
-            padding: 10px 5%; /* Un poco menos de padding vertical */
+            padding: 10px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -57,7 +58,7 @@
             text-decoration: none;
         }
         .nav-logo {
-            height: 40px; /* Tamaño del logo en el nav */
+            height: 40px;
             width: auto;
             object-fit: contain;
         }
@@ -157,6 +158,31 @@
             border-left: 10px solid var(--azul);
         }
 
+        /* Sección De Runners para Runners */
+        .signature-section {
+            padding: 60px 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+        .signature-text {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: 900;
+            color: var(--azul);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+        .heart-icon {
+            font-size: 3rem;
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
         /* Footer y Redes */
         footer {
             background: #f8f9fa;
@@ -186,7 +212,7 @@
             .time-box { width: 65px; height: 75px; }
             .time-box span { font-size: 1.4rem; }
             .btn { width: 100%; }
-            .nav-logo { height: 35px; } /* Un poco más pequeño en móvil */
+            .nav-logo { height: 35px; }
         }
     </style>
 </head>
@@ -244,6 +270,13 @@
             <p><strong>👟 CATEGORÍAS:</strong> Desde 4 hasta 15 años (Ramas Varonil y Femenil).</p>
             <p><strong>🎁 BENEFICIOS:</strong> Medalla, hidratación, número de corredor y premios sorpresa.</p>
             <p style="margin-top: 15px; color: var(--naranja); font-weight: 700;">¡ACCESO TOTALMENTE GRATUITO!</p>
+        </section>
+
+        <section class="signature-section">
+            <p class="signature-text">DE RUNNERS PARA RUNNERS</p>
+            <div class="heart-icon">
+                <span style="color:var(--azul);">❤️</span><span style="color:var(--naranja);">💙</span><span style="color:var(--celeste);">💚</span><span style="color:var(--amarillo);">🧡</span>
+            </div>
         </section>
 
     </main>
