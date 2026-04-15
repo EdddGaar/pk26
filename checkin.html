@@ -23,70 +23,64 @@
         .multiple { background: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
         .lista-seleccion { list-style: none; padding: 0; margin-top: 10px; }
         .item-runner { background: white; border: 2px solid var(--azul); padding: 12px; margin-bottom: 8px; border-radius: 12px; cursor: pointer; color: var(--azul); font-weight: bold; text-align: left; }
-        footer { margin-top: 30px; font-size: 11px; color: #888; }
     </style>
 </head>
 <body>
     <img src="https://raw.githubusercontent.com/EdddGaar/pk26/0736f0bae6bb4aac915f93b67fad761692512464/Bannner.png" class="header-img">
-    
     <div class="container">
         <h1>STAFF CHECK-IN 🏁</h1>
         <input type="text" id="searchInput" placeholder="Nombre o Folio">
         <button class="btn" onclick="ejecutarCheckIn(document.getElementById('searchInput').value)">🔍 BUSCAR</button>
         <button class="btn btn-qr" id="qrBtn" onclick="toggleScanner()">📷 ESCANEAR QR</button>
-        
         <div id="result"></div>
         <video id="video" autoplay playsinline muted></video>
         <canvas id="canvas" hidden></canvas>
     </div>
-    <footer>© 2026 RE-CORRE TOLUCA</footer>
 
     <script>
         // --- ⚙️ PEGA AQUÍ TU URL DE APPS SCRIPT ---
         const WEB_APP_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
 
-        let scanning = false;
-        let video = document.getElementById("video");
-        let resDiv = document.getElementById("result");
-        let streamRef = null;
-
-        async function ejecutarCheckIn(valor) {
+        function ejecutarCheckIn(valor) {
             if(!valor) return;
+            const resDiv = document.getElementById("result");
             resDiv.style.display = "block";
             resDiv.className = "multiple";
-            resDiv.innerHTML = "⏳ CONECTANDO CON LA BASE DE DATOS...";
+            resDiv.innerHTML = "⏳ Consultando...";
 
-            try {
-                // Usamos fetch directo. Apps Script redirigirá, el navegador lo manejará.
-                const response = await fetch(WEB_APP_URL, {
-                    method: "POST",
-                    body: JSON.stringify({ valor: valor })
-                });
-
-                const res = await response.json();
-                
-                resDiv.className = res.status;
-                if (res.status === "multiple") {
-                    let html = "<p>👥 Se encontraron varios. Selecciona el correcto:</p><ul class='lista-seleccion'>";
-                    res.data.forEach(r => {
-                        html += `<li class="item-runner" onclick="ejecutarCheckIn('${r.folio}')">
-                            ${r.nombre}<br><small>Folio: ${r.folio} | Cat: ${r.categoria}</small>
-                        </li>`;
-                    });
-                    resDiv.innerHTML = html + "</ul>";
-                } else {
-                    resDiv.innerHTML = res.msg.replace(/\n/g, "<br>");
-                    if(res.status === "ok") {
-                        document.getElementById('searchInput').value = "";
-                        if(window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
-                    }
-                }
-            } catch (err) {
-                resDiv.className = "error";
-                resDiv.innerHTML = "❌ ERROR: No se pudo conectar. Verifica que la App Script esté publicada como 'Anyone'.";
-                console.error(err);
-            }
+            // Técnica JSONP para evitar errores de conexión
+            const script = document.createElement('script');
+            script.src = `${WEB_APP_URL}?valor=${encodeURIComponent(valor)}&callback=procesarRespuesta`;
+            document.body.appendChild(script);
+            document.body.removeChild(script);
         }
+
+        // Esta función recibe la respuesta desde Google
+        window.procesarRespuesta = function(res) {
+            const resDiv = document.getElementById("result");
+            resDiv.className = res.status;
+            
+            if (res.status === "multiple") {
+                let html = "<p>👥 Se encontraron varios:</p><ul class='lista-seleccion'>";
+                res.data.forEach(r => {
+                    html += `<li class="item-runner" onclick="ejecutarCheckIn('${r.folio}')">
+                        ${r.nombre}<br><small>Folio: ${r.folio} | Cat: ${r.categoria}</small>
+                    </li>`;
+                });
+                resDiv.innerHTML = html + "</ul>";
+            } else {
+                resDiv.innerHTML = res.msg.replace(/\n/g, "<br>");
+                if(res.status === "ok") {
+                    document.getElementById('searchInput').value = "";
+                    if(window.navigator.vibrate) window.navigator.vibrate([100, 50, 100]);
+                }
+            }
+        };
+
+        // --- Lógica de Cámara ---
+        let scanning = false;
+        let video = document.getElementById("video");
+        let streamRef = null;
 
         async function toggleScanner() {
             if (scanning) { stopScan(); return; }
@@ -95,7 +89,7 @@
                 streamRef = s; video.srcObject = s; video.style.display = "block";
                 scanning = true; document.getElementById("qrBtn").innerText = "⏹️ DETENER";
                 video.play(); requestAnimationFrame(scanFrame);
-            } catch (e) { alert("⚠️ Error de cámara: Asegúrate de dar permisos."); }
+            } catch (e) { alert("⚠️ Error de cámara."); }
         }
 
         function stopScan() {
@@ -107,7 +101,7 @@
         function scanFrame() {
             if (!scanning) return;
             if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                const canvas = document.getElementById("canvas");
+                const canvas = document.getElementById("canvas") || document.createElement("canvas");
                 const ctx = canvas.getContext("2d");
                 canvas.width = video.videoWidth; canvas.height = video.videoHeight;
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
