@@ -18,6 +18,7 @@
             --whatsapp: #25D366;
             --fb-blue: #1877F2;
             --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --gris-desactivado: #cccccc;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,10 +40,10 @@
             background: radial-gradient(circle at center, #ffffff 0%, #f0faff 100%);
         }
 
-        /* Navbar estilo CDMX con Logo */
+        /* Navbar estilo CDMX */
         nav {
             background: white;
-            padding: 10px 5%; /* Un poco menos de padding vertical */
+            padding: 10px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -57,7 +58,7 @@
             text-decoration: none;
         }
         .nav-logo {
-            height: 40px; /* Tamaño del logo en el nav */
+            height: 40px;
             width: auto;
             object-fit: contain;
         }
@@ -84,7 +85,7 @@
         }
         .hero img:hover { transform: scale(1.01); }
 
-        /* Countdown Estilo CDMX / Garmin */
+        /* Countdown */
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -112,11 +113,31 @@
             font-weight: 900;
             color: var(--celeste);
             text-transform: uppercase;
-            margin: 40px 0 25px;
+            margin: 40px 0 10px;
             letter-spacing: -1px;
         }
 
-        /* Botones de Inscripción */
+        /* ESTILOS SOLD OUT */
+        .sold-out-badge {
+            background-color: var(--naranja);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(233, 78, 27, 0.3);
+            animation: pulse 2s infinite;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
         .btn-group {
             display: flex;
             justify-content: center;
@@ -125,26 +146,22 @@
             margin-bottom: 50px;
             padding: 0 20px;
         }
-        .btn {
+
+        .btn-disabled {
             padding: 16px 30px;
-            border: 2px solid var(--azul);
+            border: 2px solid var(--gris-desactivado);
             border-radius: 12px;
             text-decoration: none;
-            color: var(--azul);
+            color: #888;
+            background-color: #f5f5f5;
             font-weight: 700;
-            transition: 0.3s;
             min-width: 280px;
             text-align: center;
             text-transform: uppercase;
             font-size: 0.9rem;
+            pointer-events: none; /* Bloquea clics */
+            cursor: not-allowed;
         }
-        .btn-wa { border-color: var(--whatsapp); color: var(--whatsapp); }
-        .btn:hover {
-            background: var(--azul);
-            color: white;
-            transform: translateY(-3px);
-        }
-        .btn-wa:hover { background: var(--whatsapp); color: white; border-color: var(--whatsapp); }
 
         /* Tarjetas de Información */
         .info-card {
@@ -157,7 +174,7 @@
             border-left: 10px solid var(--azul);
         }
 
-        /* Footer y Redes */
+        /* Footer */
         footer {
             background: #f8f9fa;
             padding: 50px 20px;
@@ -185,8 +202,7 @@
             .nav-links { display: none; }
             .time-box { width: 65px; height: 75px; }
             .time-box span { font-size: 1.4rem; }
-            .btn { width: 100%; }
-            .nav-logo { height: 35px; } /* Un poco más pequeño en móvil */
+            .btn-disabled { width: 100%; }
         }
     </style>
 </head>
@@ -227,14 +243,21 @@
 
         <section id="inscripciones" style="text-align: center;">
             <h2 class="section-title">INSCRIPCIONES</h2>
+            
+            <div class="sold-out-badge">⚠️ ¡INSCRIPCIONES AGOTADAS! ⚠️</div>
+            
+            <p style="margin-bottom: 25px; font-weight: 700; color: #555; max-width: 600px; margin-left: auto; margin-right: auto;">
+                ¡Gracias por su increíble interés! Hemos llegado al límite de cupo para el evento de este año. 
+                Sigue nuestras redes para futuras ediciones.
+            </p>
+
             <div class="btn-group">
-                <a href="https://forms.gle/XAvYyZg4U42rauHm6" target="_blank" class="btn">
-                    📝 REGISTRO EN LÍNEA (FORMS)
-                </a>
-                <a href="https://wa.me/527299213873?text=Hola%20equipo%20Recorre%20Club%2C%20me%20gustar%C3%ADa%20inscribir%20a%20un%20peque%20para%20la%20carrera%20del%2026%20de%20abril." 
-                   target="_blank" class="btn btn-wa">
-                    💬 REGISTRO POR WHATSAPP
-                </a>
+                <span class="btn-disabled">
+                    🚫 REGISTRO CERRADO (FULL)
+                </span>
+                <span class="btn-disabled">
+                    🚫 WHATSAPP NO DISPONIBLE
+                </span>
             </div>
         </section>
 
@@ -284,7 +307,7 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Partículas Dinámicas con colores de la marca
+        // Partículas Dinámicas
         particlesJS("particles-js", {
           "particles": {
             "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
