@@ -40,7 +40,6 @@
             background: radial-gradient(circle at center, #ffffff 0%, #f0faff 100%);
         }
 
-        /* Navbar estilo CDMX */
         nav {
             background: white;
             padding: 10px 5%;
@@ -71,7 +70,6 @@
             text-transform: uppercase;
         }
 
-        /* Hero Section */
         .hero {
             padding: 40px 20px;
             text-align: center;
@@ -83,9 +81,7 @@
             box-shadow: var(--shadow);
             transition: transform 0.3s ease;
         }
-        .hero img:hover { transform: scale(1.01); }
 
-        /* Countdown */
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -107,7 +103,6 @@
         .time-box span { font-size: 1.8rem; font-weight: 900; line-height: 1; }
         .time-box small { font-size: 0.6rem; text-transform: uppercase; font-weight: 700; }
 
-        /* Sección Títulos */
         .section-title {
             font-size: clamp(1.5rem, 5vw, 2.5rem);
             font-weight: 900;
@@ -117,7 +112,6 @@
             letter-spacing: -1px;
         }
 
-        /* ESTILOS SOLD OUT */
         .sold-out-badge {
             background-color: var(--naranja);
             color: white;
@@ -137,6 +131,34 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+
+        /* Estilos Buscador */
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: 'Montserrat';
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .search-input:focus { border-color: var(--celeste); }
+
+        .btn-search {
+            width: 100%;
+            padding: 15px;
+            background: var(--azul);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        .btn-search:hover { background: #155a96; transform: translateY(-2px); }
 
         .btn-group {
             display: flex;
@@ -160,10 +182,8 @@
             text-transform: uppercase;
             font-size: 0.9rem;
             pointer-events: none;
-            cursor: not-allowed;
         }
 
-        /* Tarjetas de Información */
         .info-card {
             background: white;
             padding: 30px;
@@ -174,7 +194,17 @@
             border-left: 10px solid var(--azul);
         }
 
-        /* Footer */
+        /* Estilo del Gafete de resultado */
+        #resultadoBusqueda {
+            display: none;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 20px;
+            background: #fff;
+            border: 2px solid #eee;
+            box-shadow: var(--shadow);
+        }
+
         footer {
             background: #f8f9fa;
             padding: 50px 20px;
@@ -196,19 +226,16 @@
             color: white;
         }
         .fb { background: var(--fb-blue); }
-        
-        /* WhatsApp del Footer Deshabilitado */
         .wa-disabled { 
-            background: #a0a0a0; /* Color gris */
+            background: #a0a0a0;
             cursor: not-allowed;
-            pointer-events: none; /* No permite clics */
+            pointer-events: none;
             opacity: 0.6;
         }
 
         @media (max-width: 600px) {
             .nav-links { display: none; }
             .time-box { width: 65px; height: 75px; }
-            .time-box span { font-size: 1.4rem; }
             .btn-disabled { width: 100%; }
         }
     </style>
@@ -219,15 +246,12 @@
 
     <nav>
         <a href="/" class="nav-logo-link">
-            <img src="https://raw.githubusercontent.com/EdddGaar/pk26/a88ad74e221f1707b77eb548878cdff8587ffa1b/Re%20corre%20Logo.jpg" 
-                 alt="Re Corre Pet Logo" 
-                 class="nav-logo">
+            <img src="https://raw.githubusercontent.com/EdddGaar/pk26/a88ad74e221f1707b77eb548878cdff8587ffa1b/Re%20corre%20Logo.jpg" alt="Re Corre Logo" class="nav-logo">
         </a>
-        
         <div class="nav-links">
             <a href="#inscripciones">Inscripciones</a>
+            <a href="#consulta">Mi Folio</a>
             <a href="#convocatoria">Convocatoria</a>
-            <a href="https://recorre.club/checkin.html">Acceso Staff</a>
         </div>
     </nav>
 
@@ -235,45 +259,56 @@
         
         <section class="hero">
             <img src="https://raw.githubusercontent.com/EdddGaar/pk26/1a6c4fff0a8f6b388179090d14b90b93e1e9e6bc/Bannner.png" alt="Tu Peque Recorre 2026 Banner">
-            
             <div class="countdown-container">
                 <div class="time-box"><span id="days">00</span><small>días</small></div>
                 <div class="time-box"><span id="hours">00</span><small>horas</small></div>
                 <div class="time-box"><span id="minutes">00</span><small>minutos</small></div>
                 <div class="time-box"><span id="seconds">00</span><small>segundos</small></div>
             </div>
-            
-            <p style="font-weight: 700; color: var(--azul); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;">
+            <p style="font-weight: 700; color: var(--azul); font-size: 1.1rem; text-transform: uppercase;">
                 DOMINGO 26 DE ABRIL, 2026 | TOLUCA, MÉXICO
             </p>
         </section>
 
         <section id="inscripciones" style="text-align: center;">
             <h2 class="section-title">INSCRIPCIONES</h2>
-            
             <div class="sold-out-badge">⚠️ ¡INSCRIPCIONES AGOTADAS! ⚠️</div>
-            
-            <p style="margin-bottom: 25px; font-weight: 700; color: #555; max-width: 600px; margin-left: auto; margin-right: auto;">
-                ¡Gracias por su increíble interés! Hemos llegado al límite de cupo para el evento de este año. 
-                Sigue nuestras redes para futuras ediciones.
+            <p style="margin-bottom: 25px; font-weight: 700; color: #555; max-width: 600px; margin: auto;">
+                Hemos llegado al límite de cupo. ¡Gracias por su increíble interés!
             </p>
-
             <div class="btn-group">
-                <span class="btn-disabled">
-                    🚫 REGISTRO CERRADO (FULL)
-                </span>
-                <span class="btn-disabled">
-                    🚫 WHATSAPP NO DISPONIBLE
-                </span>
+                <span class="btn-disabled">🚫 REGISTRO CERRADO (FULL)</span>
+                <span class="btn-disabled">🚫 WHATSAPP NO DISPONIBLE</span>
+            </div>
+        </section>
+
+        <section id="consulta" class="info-card" style="border-left-color: var(--celeste); text-align: center; margin-top: 50px;">
+            <h2 style="color: var(--azul); margin-bottom: 10px; font-weight: 900;">¿YA ESTÁS INSCRITO? 🔍</h2>
+            <p style="margin-bottom: 20px; font-size: 0.9rem;">Recupera tu código QR ingresando los datos del registro:</p>
+            
+            <div style="max-width: 400px; margin: auto;">
+                <input type="text" id="searchNombre" class="search-input" placeholder="Nombre completo del peque">
+                <input type="email" id="searchEmail" class="search-input" placeholder="Correo del tutor">
+                <button onclick="consultarRegistro()" id="btnBuscar" class="btn-search">BUSCAR REGISTRO</button>
+            </div>
+
+            <div id="resultadoBusqueda">
+                <h3 id="resNombre" style="color: var(--azul); font-size: 1.5rem; margin-bottom: 5px;"></h3>
+                <div id="badgeFolio" style="display:inline-block; background: gold; padding: 5px 15px; border-radius: 8px; font-weight: 900; margin-bottom: 15px;">
+                    FOLIO: #<span id="resFolio"></span>
+                </div>
+                <p id="resCat" style="font-weight: 700; text-transform: uppercase; letter-spacing: 1px;"></p>
+                <img id="resQR" src="" alt="QR" style="width: 180px; margin: 20px 0; border: 8px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                <p style="font-size: 0.8rem; color: #888;">Presenta este código en la entrada el día del evento.</p>
             </div>
         </section>
 
         <section id="convocatoria" class="info-card">
             <h2 style="color: var(--azul); margin-bottom: 15px; font-weight: 900;">DETALLES DEL EVENTO</h2>
             <p><strong>📍 LUGAR:</strong> Pista del Seguro Social (IMSS), Toluca.</p>
-            <p><strong>👟 CATEGORÍAS:</strong> Desde 4 hasta 15 años (Ramas Varonil y Femenil).</p>
-            <p><strong>🎁 BENEFICIOS:</strong> Medalla, hidratación, número de corredor y premios sorpresa.</p>
-            <p style="margin-top: 15px; color: var(--naranja); font-weight: 700;">¡ACCESO TOTALMENTE GRATUITO!</p>
+            <p><strong>👟 CATEGORÍAS:</strong> De 4 a 15 años.</p>
+            <p><strong>🎁 BENEFICIOS:</strong> Medalla, hidratación, número y premios sorpresa.</p>
+            <p style="margin-top: 15px; color: var(--naranja); font-weight: 700;">¡ACCESO GRATUITO PARA INSCRITOS!</p>
         </section>
 
     </main>
@@ -281,54 +316,86 @@
     <footer>
         <div class="social-links">
             <a href="https://www.facebook.com/share/1FAi9NEt5k/" target="_blank" class="fb">FACEBOOK</a>
-            
             <a href="javascript:void(0)" class="wa-disabled">WHATSAPP (CERRADO)</a>
         </div>
         <p>Tu Peque Recorre 2026 | 🏁 Running Club Recorre</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;"><strong>RECORRE.CLUB</strong></p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        const targetDate = new Date("April 26, 2026 08:00:00").getTime();
+        // Lógica de consulta al servidor
+        async function consultarRegistro() {
+            const nombre = document.getElementById('searchNombre').value.trim();
+            const email = document.getElementById('searchEmail').value.trim();
+            const btn = document.getElementById('btnBuscar');
+            const resDiv = document.getElementById('resultadoBusqueda');
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                document.querySelector(".countdown-container").innerHTML = "<h3>¡ES HOY! 🏃‍♂️</h3>";
+            if (!nombre || !email) {
+                alert("Por favor, completa ambos campos para buscar.");
                 return;
             }
 
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
+            btn.innerText = "BUSCANDO...";
+            btn.disabled = true;
+            resDiv.style.display = "none";
 
-            document.getElementById("days").innerText = d < 10 ? "0"+d : d;
-            document.getElementById("hours").innerText = h < 10 ? "0"+h : h;
-            document.getElementById("minutes").innerText = m < 10 ? "0"+m : m;
-            document.getElementById("seconds").innerText = s < 10 ? "0"+s : s;
+            try {
+                // URL DE TU APP SCRIPT (Main.gs)
+                const URL_GAS = "https://script.google.com/macros/s/AKfycbya1YJKDUQRy8OUH9ctHArzaGA4pMyxYYbkSnMAn1pbuag688sNlL3TL7utrWEWIJZ_OA/exec";
+
+                // Usamos JSONP o una técnica simple de consulta ya que es un GET/POST a GAS
+                const response = await fetch(URL_GAS, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        action: "buscar",
+                        nombre: nombre,
+                        email: email
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    document.getElementById('resNombre').innerText = data.nombre;
+                    document.getElementById('resFolio').innerText = data.folio;
+                    document.getElementById('resCat').innerText = "CATEGORÍA: " + data.categoria;
+                    document.getElementById('resQR').src = `https://quickchart.io/qr?text=ID:${data.folio}|NOM:${data.nombre}&size=300`;
+                    resDiv.style.display = "block";
+                    resDiv.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    alert(data.msg || "No se encontró el registro. Verifica que los datos coincidan exactamente con lo que registraste.");
+                }
+            } catch (error) {
+                alert("Se encontró un error al conectar. Por favor intenta desde nuestro Bot de WhatsApp.");
+            } finally {
+                btn.innerText = "BUSCAR REGISTRO";
+                btn.disabled = false;
+            }
         }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
 
+        // Countdown
+        const targetDate = new Date("April 26, 2026 08:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const dist = targetDate - now;
+            if (dist < 0) return;
+            document.getElementById("days").innerText = Math.floor(dist / 86400000);
+            document.getElementById("hours").innerText = Math.floor((dist % 86400000) / 3600000);
+            document.getElementById("minutes").innerText = Math.floor((dist % 3600000) / 60000);
+            document.getElementById("seconds").innerText = Math.floor((dist % 60000) / 1000);
+        }, 1000);
+
+        // Particles
         particlesJS("particles-js", {
           "particles": {
-            "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
-            "color": { "value": ["#1D71B8", "#E94E1B", "#5BC0BE", "#F1C40F"] },
+            "number": { "value": 80 },
+            "color": { "value": ["#1D71B8", "#E94E1B", "#5BC0BE"] },
             "shape": { "type": "circle" },
-            "opacity": { "value": 0.4, "random": true },
-            "size": { "value": 4, "random": true },
-            "line_linked": { "enable": true, "distance": 150, "color": "#1D71B8", "opacity": 0.2, "width": 1 },
-            "move": { "enable": true, "speed": 1.5, "direction": "none", "out_mode": "out" }
-          },
-          "interactivity": {
-            "detect_on": "canvas",
-            "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" } }
-          },
-          "retina_detect": true
+            "opacity": { "value": 0.4 },
+            "size": { "value": 3 },
+            "line_linked": { "enable": true, "distance": 150, "color": "#1D71B8", "opacity": 0.2 },
+            "move": { "enable": true, "speed": 1.5 }
+          }
         });
     </script>
 </body>
