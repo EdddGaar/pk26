@@ -159,7 +159,7 @@
             text-align: center;
             text-transform: uppercase;
             font-size: 0.9rem;
-            pointer-events: none; /* Bloquea clics */
+            pointer-events: none;
             cursor: not-allowed;
         }
 
@@ -196,7 +196,14 @@
             color: white;
         }
         .fb { background: var(--fb-blue); }
-        .wa { background: var(--whatsapp); }
+        
+        /* WhatsApp del Footer Deshabilitado */
+        .wa-disabled { 
+            background: #a0a0a0; /* Color gris */
+            cursor: not-allowed;
+            pointer-events: none; /* No permite clics */
+            opacity: 0.6;
+        }
 
         @media (max-width: 600px) {
             .nav-links { display: none; }
@@ -274,7 +281,8 @@
     <footer>
         <div class="social-links">
             <a href="https://www.facebook.com/share/1FAi9NEt5k/" target="_blank" class="fb">FACEBOOK</a>
-            <a href="https://wa.me/" target="_blank" class="wa">WHATSAPP</a>
+            
+            <a href="javascript:void(0)" class="wa-disabled">WHATSAPP (CERRADO)</a>
         </div>
         <p>Tu Peque Recorre 2026 | 🏁 Running Club Recorre</p>
         <p style="margin-top: 10px; font-size: 0.8rem;"><strong>RECORRE.CLUB</strong></p>
@@ -282,7 +290,6 @@
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // Lógica del Countdown para el 26 de Abril 2026
         const targetDate = new Date("April 26, 2026 08:00:00").getTime();
 
         function updateCountdown() {
@@ -307,7 +314,6 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // Partículas Dinámicas
         particlesJS("particles-js", {
           "particles": {
             "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
