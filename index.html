@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tu Peque Recorre 2026 | Running Club Recorre</title>
+    <title>Certificados | Tu Peque Recorre 2026</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,10 +15,8 @@
             --naranja: #E94E1B;
             --celeste: #5BC0BE;
             --fondo: #ffffff;
-            --whatsapp: #25D366;
             --fb-blue: #1877F2;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
-            --gris-desactivado: #cccccc;
+            --shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -40,9 +38,10 @@
             background: radial-gradient(circle at center, #ffffff 0%, #f0faff 100%);
         }
 
-        /* Navbar estilo CDMX */
+        /* Navbar Moderna */
         nav {
-            background: white;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             padding: 10px 5%;
             display: flex;
             justify-content: space-between;
@@ -50,165 +49,161 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
         }
-        .nav-logo-link {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-        .nav-logo {
-            height: 40px;
-            width: auto;
-            object-fit: contain;
-        }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
+        .nav-logo-link { display: flex; align-items: center; text-decoration: none; }
+        .nav-logo { height: 45px; width: auto; }
+        
         .nav-links a { 
             text-decoration: none; 
             color: var(--azul); 
             font-weight: 700; 
             font-size: 0.75rem; 
             text-transform: uppercase;
+            margin-left: 20px;
         }
 
-        /* Hero Section */
+        /* Animaciones */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .hero {
             padding: 40px 20px;
             text-align: center;
+            animation: fadeInUp 0.8s ease-out;
         }
         .hero img {
             width: 100%;
-            max-width: 900px;
-            border-radius: 20px;
+            max-width: 850px;
+            border-radius: 25px;
             box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .hero img:hover { transform: scale(1.01); }
+        .hero img:hover { transform: scale(1.02); }
 
-        /* Countdown */
-        .countdown-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 30px 0;
-        }
-        .time-box {
-            background: var(--celeste);
-            color: white;
-            width: 80px;
-            height: 90px;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 5px 15px rgba(91, 192, 190, 0.3);
-        }
-        .time-box span { font-size: 1.8rem; font-weight: 900; line-height: 1; }
-        .time-box small { font-size: 0.6rem; text-transform: uppercase; font-weight: 700; }
-
-        /* Sección Títulos */
         .section-title {
-            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
             font-weight: 900;
-            color: var(--celeste);
+            color: var(--azul);
             text-transform: uppercase;
-            margin: 40px 0 10px;
+            margin: 30px 0 10px;
             letter-spacing: -1px;
+            text-align: center;
         }
 
-        /* ESTILOS SOLD OUT */
-        .sold-out-badge {
-            background-color: var(--naranja);
-            color: white;
-            padding: 12px 25px;
-            border-radius: 50px;
-            display: inline-block;
-            font-weight: 900;
+        /* BUSCADOR ESTILO PREMIUM */
+        .cert-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 45px;
+            border-radius: 40px;
+            margin: 20px auto 60px;
+            max-width: 650px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .cert-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 8px;
+            background: linear-gradient(90deg, var(--azul), var(--celeste), var(--naranja));
+        }
+
+        .cert-input {
+            width: 100%;
+            padding: 18px 25px;
+            border: 2px solid #eef2f6;
+            border-radius: 20px;
+            font-family: 'Montserrat', sans-serif;
             font-size: 1.1rem;
             margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(233, 78, 27, 0.3);
-            animation: pulse 2s infinite;
-            text-transform: uppercase;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .btn-group {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 50px;
-            padding: 0 20px;
-        }
-
-        .btn-disabled {
-            padding: 16px 30px;
-            border: 2px solid var(--gris-desactivado);
-            border-radius: 12px;
-            text-decoration: none;
-            color: #888;
-            background-color: #f5f5f5;
-            font-weight: 700;
-            min-width: 280px;
+            transition: all 0.3s;
             text-align: center;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            pointer-events: none;
-            cursor: not-allowed;
+            background: #fdfdfe;
         }
 
-        /* Tarjetas de Información */
+        .cert-input:focus {
+            outline: none;
+            border-color: var(--celeste);
+            box-shadow: 0 0 15px rgba(91, 192, 190, 0.2);
+        }
+
+        .cert-btn {
+            background: linear-gradient(135deg, var(--naranja) 0%, #ff7e5f 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-weight: 900;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(233, 78, 27, 0.3);
+        }
+
+        .cert-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px rgba(233, 78, 27, 0.4);
+        }
+
+        .cert-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* AVISOS */
         .info-card {
             background: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin: 20px auto;
+            padding: 40px;
+            border-radius: 30px;
+            margin: 40px auto;
             max-width: 900px;
             box-shadow: var(--shadow);
-            border-left: 10px solid var(--azul);
+            border-left: 12px solid var(--naranja);
+            animation: fadeInUp 1.2s ease-out;
         }
 
-        /* Footer */
         footer {
-            background: #f8f9fa;
-            padding: 50px 20px;
+            background: #f4f7f9;
+            padding: 60px 20px;
             text-align: center;
-            border-top: 1px solid #eee;
         }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        .social-links a {
+        
+        .fb-btn {
+            background: var(--fb-blue);
+            color: white;
             text-decoration: none;
             font-weight: 900;
-            font-size: 0.9rem;
-            padding: 10px 20px;
+            padding: 15px 35px;
             border-radius: 50px;
-            color: white;
+            display: inline-block;
+            margin-bottom: 30px;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(24, 119, 242, 0.3);
         }
-        .fb { background: var(--fb-blue); }
-        
-        .wa-disabled { 
-            background: #a0a0a0;
-            cursor: not-allowed;
-            pointer-events: none;
-            opacity: 0.6;
+        .fb-btn:hover { transform: scale(1.05); opacity: 0.9; }
+
+        #msg-status {
+            margin-top: 25px;
+            font-weight: 700;
+            min-height: 1.5em;
         }
 
         @media (max-width: 600px) {
             .nav-links { display: none; }
-            .time-box { width: 65px; height: 75px; }
-            .time-box span { font-size: 1.4rem; }
-            .btn-disabled { width: 100%; }
+            .cert-container { padding: 30px 20px; margin: 20px 10px; }
+            .section-title { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -218,103 +213,108 @@
 
     <nav>
         <a href="/" class="nav-logo-link">
-            <img src="https://raw.githubusercontent.com/EdddGaar/pk26/a88ad74e221f1707b77eb548878cdff8587ffa1b/Re%20corre%20Logo.jpg" 
-                 alt="Re Corre Logo" 
-                 class="nav-logo">
+            <img src="https://raw.githubusercontent.com/EdddGaar/pk26/a88ad74e221f1707b77eb548878cdff8587ffa1b/Re%20corre%20Logo.jpg" alt="Re Corre Logo" class="nav-logo">
         </a>
-        
         <div class="nav-links">
-            <a href="#inscripciones">Inscripciones</a>
-            <a href="#convocatoria">Convocatoria</a>
-            <a href="https://recorre.club/checkin.html">Acceso Staff</a>
+            <a href="#descarga">Certificado</a>
+            <a href="#fotos">Fotos</a>
         </div>
     </nav>
 
     <main style="max-width: 1100px; margin: auto; padding: 0 15px;">
         
         <section class="hero">
-            <img src="https://raw.githubusercontent.com/EdddGaar/pk26/1a6c4fff0a8f6b388179090d14b90b93e1e9e6bc/Bannner.png" alt="Tu Peque Recorre 2026 Banner">
-            
-            <div class="countdown-container">
-                <div class="time-box"><span id="days">00</span><small>días</small></div>
-                <div class="time-box"><span id="hours">00</span><small>horas</small></div>
-                <div class="time-box"><span id="minutes">00</span><small>minutos</small></div>
-                <div class="time-box"><span id="seconds">00</span><small>segundos</small></div>
-            </div>
-            
-            <p style="font-weight: 700; color: var(--azul); font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px;">
-                DOMINGO 26 DE ABRIL, 2026 | TOLUCA, MÉXICO
+            <img src="https://raw.githubusercontent.com/EdddGaar/pk26/1a6c4fff0a8f6b388179090d14b90b93e1e9e6bc/Bannner.png" alt="Tu Peque Recorre 2026">
+            <h2 class="section-title">¡FELICIDADES CORREDORES!</h2>
+            <p style="font-weight: 700; color: var(--azul); font-size: 1.1rem; letter-spacing: 2px;">
+                TOLUCA, MÉXICO | 2026
             </p>
         </section>
 
-        <section id="inscripciones" style="text-align: center;">
-            <h2 class="section-title">INSCRIPCIONES</h2>
-            
-            <div class="sold-out-badge">⚠️ ¡INSCRIPCIONES AGOTADAS! ⚠️</div>
-            
-            <p style="margin-bottom: 25px; font-weight: 700; color: #555; max-width: 600px; margin: auto;">
-                ¡Gracias por su increíble interés! Hemos llegado al límite de cupo para el evento de este año. 
-                Sigue nuestras redes para futuras ediciones.
-            </p>
-
-            <div class="btn-group">
-                <span class="btn-disabled">
-                    🚫 REGISTRO CERRADO (FULL)
-                </span>
-                <span class="btn-disabled">
-                    🚫 WHATSAPP NO DISPONIBLE
-                </span>
+        <section id="descarga">
+            <div class="cert-container">
+                <h3 style="margin-bottom: 15px; font-weight: 900; color: var(--azul); font-size: 1.5rem;">OBTÉN TU RECONOCIMIENTO OFICIAL</h3>
+                <p style="font-size: 0.95rem; margin-bottom: 30px; color: #555;">
+                    Ingresa el correo de registro para descargar el certificado de participación.
+                </p>
+                
+                <input type="email" id="userEmail" class="cert-input" placeholder="tu-correo@ejemplo.com">
+                
+                <button onclick="buscarCertificado()" id="btnBuscar" class="cert-btn">
+                    GENERAR Y DESCARGAR ⬇️
+                </button>
+                
+                <div id="msg-status"></div>
             </div>
         </section>
 
-        <section id="convocatoria" class="info-card">
-            <h2 style="color: var(--azul); margin-bottom: 15px; font-weight: 900;">DETALLES DEL EVENTO</h2>
-            <p><strong>📍 LUGAR:</strong> Pista del Seguro Social (IMSS), Toluca.</p>
-            <p><strong>👟 CATEGORÍAS:</strong> Desde 4 hasta 15 años (Ramas Varonil y Femenil).</p>
-            <p><strong>🎁 BENEFICIOS:</strong> Medalla, hidratación, número de corredor y premios sorpresa.</p>
-            <p style="margin-top: 15px; color: var(--naranja); font-weight: 700;">¡ACCESO TOTALMENTE GRATUITO!</p>
+        <section id="fotos" class="info-card">
+            <h2 style="color: var(--azul); margin-bottom: 20px; font-weight: 900; font-size: 1.6rem;">AVISOS POST-EVENTO</h2>
+            <p><strong>📩 CERTIFICADOS POR EMAIL:</strong> Hemos completado el envío masivo. Si no lo ves en tu bandeja, por favor <strong>revisa tu carpeta de SPAM</strong>.</p>
+            <p style="margin-top: 15px;"><strong>📸 GALERÍA DE FOTOS:</strong> ¡Ya puedes revivir los mejores momentos! Todas las fotos de la ruta y meta están disponibles en nuestro Facebook oficial.</p>
+            <p style="margin-top: 20px; color: var(--naranja); font-weight: 900; font-size: 1.1rem;">¡GRACIAS POR SER PARTE DE ESTA GRAN AVENTURA!</p>
         </section>
 
     </main>
 
     <footer>
-        <div class="social-links">
-            <a href="https://www.facebook.com/share/1FAi9NEt5k/" target="_blank" class="fb">FACEBOOK</a>
-            <a href="javascript:void(0)" class="wa-disabled">WHATSAPP (CERRADO)</a>
-        </div>
-        <p>Tu Peque Recorre 2026 | 🏁 Running Club Recorre</p>
-        <p style="margin-top: 10px; font-size: 0.8rem;"><strong>RECORRE.CLUB</strong></p>
+        <a href="https://www.facebook.com/share/1FAi9NEt5k/" target="_blank" class="fb-btn">
+            VER TODAS LAS FOTOS EN FACEBOOK
+        </a>
+        <p style="font-weight: 900; color: var(--azul);">Tu Peque Recorre 2026</p>
+        <p style="margin-top: 5px; font-size: 0.8rem; color: #888;">🏁 RUNNING CLUB RECORRE | RECORRE.CLUB</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        const targetDate = new Date("April 26, 2026 08:00:00").getTime();
+        async function buscarCertificado() {
+            const emailInput = document.getElementById('userEmail');
+            const btn = document.getElementById('btnBuscar');
+            const msg = document.getElementById('msg-status');
+            
+            // URL DE TU WEB APP GOOGLE
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyicfOeTsRxAYrh3RKs2cyMYgU4L4zh7-3lRFkltLQ2EPkuZY8WgOlbyWR9QWvwGKOmEQ/exec";
 
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-
-            if (distance < 0) {
-                document.querySelector(".countdown-container").innerHTML = "<h3>¡ES HOY! 🏃‍♂️</h3>";
+            if (!emailInput.value || !emailInput.value.includes('@')) {
+                msg.innerText = "❌ Ingresa un correo electrónico válido.";
+                msg.style.color = "var(--naranja)";
                 return;
             }
 
-            const d = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const h = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((distance % (1000 * 60)) / 1000);
+            btn.disabled = true;
+            btn.innerText = "GENERANDO... ⏱️";
+            msg.innerText = "Estamos preparando tu certificado oficial...";
+            msg.style.color = "var(--azul)";
 
-            document.getElementById("days").innerText = d < 10 ? "0"+d : d;
-            document.getElementById("hours").innerText = h < 10 ? "0"+h : h;
-            document.getElementById("minutes").innerText = m < 10 ? "0"+m : m;
-            document.getElementById("seconds").innerText = s < 10 ? "0"+s : s;
+            try {
+                const response = await fetch(`${WEB_APP_URL}?email=${encodeURIComponent(emailInput.value.trim())}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    msg.innerText = "¡Listo! Iniciando descarga de " + result.nombre;
+                    msg.style.color = "var(--celeste)";
+                    
+                    const linkSource = `data:application/pdf;base64,${result.pdfData}`;
+                    const downloadLink = document.createElement("a");
+                    downloadLink.href = linkSource;
+                    downloadLink.download = `Certificado_${result.nombre}.pdf`;
+                    downloadLink.click();
+                } else {
+                    msg.innerText = "⚠️ " + result.msg;
+                    msg.style.color = "var(--naranja)";
+                }
+            } catch (error) {
+                msg.innerText = "❌ Error de conexión. Intenta de nuevo en unos segundos.";
+                msg.style.color = "var(--naranja)";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "GENERAR Y DESCARGAR ⬇️";
+            }
         }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
 
         particlesJS("particles-js", {
           "particles": {
-            "number": { "value": 90, "density": { "enable": true, "value_area": 800 } },
+            "number": { "value": 70, "density": { "enable": true, "value_area": 800 } },
             "color": { "value": ["#1D71B8", "#E94E1B", "#5BC0BE", "#F1C40F"] },
             "shape": { "type": "circle" },
             "opacity": { "value": 0.4, "random": true },
