@@ -130,7 +130,7 @@
             text-align: center;
         }
 
-        /* 🟢 DISEÑO ESTILO CORREO DE CONFIRMACIÓN */
+        /* 🟢 DISEÑO ESTILO CORREO DE CONFIRMACIÓN CON FOLIO */
         .confirm-card {
             background: #ffffff;
             border: 1px solid #e5e5e5;
@@ -283,6 +283,25 @@
             groupDetail.style.display = (discVal === "Sí") ? "block" : "none";
         }
 
+        async function obtenerFolioConReintentos(email, nombre, reintentos = 3) {
+            for (let i = 0; i < reintentos; i++) {
+                await new Promise(r => setTimeout(r, 2000 + (i * 1000)));
+                try {
+                    const res = await fetch(`${WEB_APP_URL}?action=buscar&query=${encodeURIComponent(email)}`);
+                    const searchData = await res.json();
+                    if (searchData.success && searchData.data && searchData.data.length > 0) {
+                        const match = searchData.data.find(d => d.nombre.toLowerCase().includes(nombre.toLowerCase())) || searchData.data[searchData.data.length - 1];
+                        if (match && match.folio && match.folio !== "") {
+                            return match.folio;
+                        }
+                    }
+                } catch (err) {
+                    console.log(`Intento ${i + 1} fallido...`);
+                }
+            }
+            return null;
+        }
+
         async function procesarInscripcion(e) {
             e.preventDefault();
             
@@ -313,10 +332,10 @@
 
             btn.disabled = true;
             btn.innerText = "PROCESANDO REGISTRO... ⏱️";
-            msg.innerHTML = "<p style='color:var(--azul); font-weight:700; text-align:center;'>Guardando inscripción y obteniendo folio oficial...</p>";
+            msg.innerHTML = "<p style='color:var(--azul); font-weight:700; text-align:center;'>Guardando inscripción y consultando tu folio oficial...</p>";
 
             try {
-                // 1. Enviar datos a Apps Script
+                // 1. Enviar datos POST a Google Apps Script
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -324,27 +343,12 @@
                     body: JSON.stringify(payload)
                 });
 
-                // 2. Esperar 1.8 segundos para dar tiempo a la escritura en Google Sheet
-                await new Promise(r => setTimeout(r, 1800));
+                // 2. Intentar recuperar el Folio en tiempo real
+                let folioAsignado = await obtenerFolioConReintentos(emailUser, nombreNiño);
+                const textoFolio = folioAsignado ? `FOLIO: ${folioAsignado}` : `FOLIO ENVIADO A TU CORREO`;
+                const waTexto = folioAsignado ? `Hola,%20mi%20folio%20es%20${folioAsignado}%20para%20${encodeURIComponent(nombreNiño)}` : `Hola,%20acabo%20de%20inscribir%20a%20${encodeURIComponent(nombreNiño)}`;
 
-                // 3. Consultar la API por GET para obtener el Folio asignado
-                let folioAsignado = "FOLIO GENERADO";
-                try {
-                    const res = await fetch(`${WEB_APP_URL}?action=buscar&query=${encodeURIComponent(emailUser)}`);
-                    const searchData = await res.json();
-                    
-                    if (searchData.success && searchData.data && searchData.data.length > 0) {
-                        // Buscar el registro exacto o tomar el más reciente
-                        const item = searchData.data.find(d => d.nombre.toLowerCase().includes(nombreNiño.toLowerCase())) || searchData.data[searchData.data.length - 1];
-                        if (item && item.folio) {
-                            folioAsignado = item.folio;
-                        }
-                    }
-                } catch (err) {
-                    console.log("No se pudo obtener el folio vía GET.");
-                }
-
-                // 4. Renderizar la vista idéntica al correo electrónico
+                // 3. Mostrar resumen idéntico al correo oficial
                 form.style.display = "none";
                 msg.innerHTML = `
                     <div class="confirm-card">
@@ -358,7 +362,7 @@
 
                         <!-- Folio Destacado -->
                         <div class="folio-box">
-                            NÚMERO DE FOLIO: ${folioAsignado}
+                            NÚMERO DE ${textoFolio}
                         </div>
 
                         <!-- Indicaciones de Check-in -->
@@ -395,7 +399,7 @@
                         </p>
 
                         <div style="text-align:center;">
-                            <a href="https://wa.me/525534421722?text=Hola,%20mi%20folio%20es%20${folioAsignado}%20para%20${encodeURIComponent(nombreNiño)}" target="_blank" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:14px 28px; border-radius:30px; font-weight:700; font-size:0.9rem; box-shadow:0 8px 18px rgba(39, 174, 96, 0.3);">
+                            <a href="https://wa.me/525534421722?text=${waTexto}" target="_blank" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:14px 28px; border-radius:30px; font-weight:700; font-size:0.9rem; box-shadow:0 8px 18px rgba(39, 174, 96, 0.3);">
                                 IR A WHATSAPP CON MI FOLIO 📱
                             </a>
                         </div>
