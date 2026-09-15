@@ -136,6 +136,17 @@
             padding: 25px;
             border-radius: 20px;
             color: #166534;
+            text-align: left;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #bbf7d0;
+            margin: 15px 0;
+            font-size: 0.88rem;
+            color: #333;
         }
 
         footer {
@@ -217,6 +228,14 @@
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzpZXjVUwHC8sChMmcspEq7XuUCAZgO6_qZQKr8NohTxAegGz_80Jut8Aa2qEXCz18E/exec";
 
+        function getCatText(edad) {
+            if (edad <= 6) return "VERDE (4 a 6 años) • 100m";
+            if (edad <= 8) return "AMARILLO (7 a 8 años) • 200m";
+            if (edad <= 10) return "AZUL (9 a 10 años) • 400m";
+            if (edad <= 13) return "MORADO (11 a 13 años) • 800m";
+            return "ROJO (14 a 15 años) • 1600m";
+        }
+
         function calcularCategoria() {
             const edad = parseInt(document.getElementById('edad').value);
             const badge = document.getElementById('catPreview');
@@ -226,14 +245,7 @@
                 return;
             }
 
-            let catText = "";
-            if (edad <= 6) catText = "Categoría: VERDE (4 a 6 años) • Distancia: 100m";
-            else if (edad <= 8) catText = "Categoría: AMARILLO (7 a 8 años) • Distancia: 200m";
-            else if (edad <= 10) catText = "Categoría: AZUL (9 a 10 años) • Distancia: 400m";
-            else if (edad <= 13) catText = "Categoría: MORADO (11 a 13 años) • Distancia: 800m";
-            else catText = "Categoría: ROJO (14 a 15 años) • Distancia: 1600m";
-
-            badge.innerText = catText;
+            badge.innerText = "Categoría: " + getCatText(edad);
             badge.style.display = "block";
         }
 
@@ -254,22 +266,26 @@
             const discDetalle = document.getElementById('discapacidadDetalle').value;
             const discFinal = (discVal === "Sí" && discDetalle.trim() !== "") ? `Sí (${discDetalle.trim()})` : discVal;
 
-            const emailUser = document.getElementById('email').value.trim();
             const nombreNiño = document.getElementById('nombre').value.trim();
+            const edadNiño = parseInt(document.getElementById('edad').value);
+            const tutorNiño = document.getElementById('tutor').value.trim();
+            const telNiño = document.getElementById('telefono').value.trim();
+            const emailUser = document.getElementById('email').value.trim();
+            const catInfo = getCatText(edadNiño);
 
             const payload = {
                 action: "registro",
                 nombre: nombreNiño,
-                edad: parseInt(document.getElementById('edad').value),
+                edad: edadNiño,
                 discapacidad: discFinal,
-                tutor: document.getElementById('tutor').value.trim(),
-                telefono: document.getElementById('telefono').value.trim(),
+                tutor: tutorNiño,
+                telefono: telNiño,
                 email: emailUser
             };
 
             btn.disabled = true;
             btn.innerText = "PROCESANDO REGISTRO... ⏱️";
-            msg.innerHTML = "<p style='color:var(--azul); font-weight:700;'>Guardando inscripción y enviando correo de confirmación...</p>";
+            msg.innerHTML = "<p style='color:var(--azul); font-weight:700; text-align:center;'>Guardando inscripción y enviando correo de confirmación...</p>";
 
             try {
                 await fetch(WEB_APP_URL, {
@@ -282,24 +298,37 @@
                 form.style.display = "none";
                 msg.innerHTML = `
                     <div class="success-box">
-                        <h2>¡Inscripción Confirmada! 🎉</h2>
-                        <p>Hemos guardado los datos de <strong>${nombreNiño}</strong> y enviado el comprobante con tu folio oficial a <strong>${emailUser}</strong>.</p>
+                        <h2 style="text-align:center;">¡Inscripción Confirmada! 🎉</h2>
+                        <p style="text-align:center; font-size:0.9rem; margin-top:5px;">
+                            Hemos guardado el registro correctamente. Revisa tu correo electrónico para obtener tu comprobante.
+                        </p>
                         
-                        <div style="font-size:1.3rem; font-weight:900; color:#27ae60; margin:15px 0;">
-                            ✅ Pase de competidor enviado a tu correo
+                        <div class="summary-card">
+                            <strong>Resumen del Registro:</strong><br>
+                            👤 <strong>Participante:</strong> ${nombreNiño}<br>
+                            🎽 <strong>Categoría:</strong> ${catInfo}<br>
+                            👨‍👩‍👧 <strong>Tutor:</strong> ${tutorNiño}<br>
+                            📱 <strong>Teléfono:</strong> ${telNiño}<br>
+                            📧 <strong>Correo:</strong> ${emailUser}
+                        </div>
+
+                        <div style="text-align:center; font-size:0.95rem; font-weight:900; color:#27ae60; margin:15px 0;">
+                            ✅ Pase digital enviado a tu Inbox vía noreply@recorre.club
                         </div>
                         
-                        <p style="font-size:0.85rem; color:#555; margin-bottom:15px;">
-                            Revisa tu bandeja de entrada (Inbox). Preséntate a las <strong>07:45 AM</strong> el día del evento en la mesa de control.
+                        <p style="font-size:0.8rem; color:#555; margin-bottom:15px; text-align:center;">
+                            Favor de presentarse a las <strong>07:45 AM</strong> el día del evento en la mesa de control de la Pista del IMSS.
                         </p>
 
-                        <a href="https://wa.me/525534421722?text=Hola,%20acabo%20de%20inscribirme%20en%20el%20sitio%20web" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
-                            CONTINUAR EN WHATSAPP 📱
-                        </a>
+                        <div style="text-align:center;">
+                            <a href="https://wa.me/525534421722?text=Hola,%20acabo%20de%20inscribir%20a%20${encodeURIComponent(nombreNiño)}%20en%20el%20sitio%20web" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
+                                CONTINUAR EN WHATSAPP 📱
+                            </a>
+                        </div>
                     </div>
                 `;
             } catch (err) {
-                msg.innerHTML = "<p style='color:var(--naranja); font-weight:700;'>❌ Error de conexión al servidor. Revisa tu señal e intenta de nuevo.</p>";
+                msg.innerHTML = "<p style='color:var(--naranja); font-weight:700; text-align:center;'>❌ Error de conexión al servidor. Revisa tu señal e intenta de nuevo.</p>";
                 btn.disabled = false;
                 btn.innerText = "COMPLETAR INSCRIPCIÓN 🏃‍♂️✨";
             }
