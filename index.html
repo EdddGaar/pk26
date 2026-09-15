@@ -16,7 +16,7 @@
             --morado: #8E44AD;
             --verde: #27AE60;
             --amarillo: #F1C40F;
-            --fondo: #0d0f12; /* Fondo estilo Tokio World Major */
+            --fondo: #0d0f12;
             --card-bg: rgba(255, 255, 255, 0.96);
             --fb-blue: #1877F2;
             --whatsapp: #25D366;
@@ -97,7 +97,6 @@
             line-height: 1.1;
         }
 
-        /* ⏱️ RELOJ DE CUENTA REGRESIVA ESTILO TOKIO / SEIKO / CDMX */
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -132,7 +131,6 @@
             letter-spacing: 1px;
         }
 
-        /* 📱 TARJETA DE REGISTRO Y CONSULTA */
         .cert-container {
             background: var(--card-bg);
             color: #333333;
@@ -215,7 +213,6 @@
         }
         .wa-direct-btn:hover { transform: translateY(-3px); }
 
-        /* 📸 GALERÍA DE EVENTOS ANTERIORES */
         .eventos-anteriores {
             margin: 50px auto;
             max-width: 1000px;
@@ -244,7 +241,6 @@
             transition: transform 0.3s ease;
             background: #1a1c23;
         }
-
         .card-evento:hover { transform: translateY(-8px); }
 
         .card-evento img {
@@ -252,7 +248,6 @@
             height: 220px;
             object-fit: cover;
             display: block;
-            transition: filter 0.3s ease;
         }
 
         .card-evento .info {
@@ -269,7 +264,6 @@
             font-size: 0.8rem;
         }
 
-        /* ℹ️ INFORMACIÓN Y MAPA ESTILO MARATÓN CDMX */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -299,9 +293,7 @@
             font-size: 0.8rem;
             font-weight: 700;
             margin-top: 10px;
-            transition: background 0.3s;
         }
-        .map-btn:hover { background: #155892; }
 
         footer {
             background: #08090b;
@@ -317,8 +309,6 @@
             border-radius: 50px;
             display: inline-block;
             margin: 10px;
-            transition: all 0.3s;
-            font-size: 0.85rem;
             color: white;
         }
         .btn-fb { background: var(--fb-blue); }
@@ -358,7 +348,6 @@
                 DOMINGO 1 DE NOVIEMBRE, 2026 | PISTA DEL IMSS, TOLUCA
             </p>
 
-            <!-- ⏱️ RELOJ SEIKO / CDMX STYLE -->
             <div class="countdown-container">
                 <div class="timer-block">
                     <div id="days" class="timer-number">00</div>
@@ -379,7 +368,6 @@
             </div>
         </section>
 
-        <!-- PORTAL DE BUSCADOR Y REGISTROS -->
         <section id="buscar">
             <div class="cert-container">
                 <h3 style="margin-bottom: 10px; font-weight: 900; color: var(--morado); font-size: 1.5rem;">
@@ -412,7 +400,6 @@
             </div>
         </section>
 
-        <!-- 📸 GALERÍA EVENTOS ANTERIORES -->
         <section id="galeria" class="eventos-anteriores">
             <h3>Galería de Eventos Anteriores 🏅</h3>
             
@@ -443,7 +430,6 @@
             </div>
         </section>
 
-        <!-- INFORMACIÓN SEDE Y MAPA ESTILO CDMX -->
         <div class="info-grid" id="info">
             <div class="support-card">
                 <h4>📍 Sede y Horario de Cita</h4>
@@ -473,10 +459,8 @@
         <p style="margin-top: 5px; font-size: 0.75rem; color: #64748b;">🏁 RUNNING CLUB RE-CORRE TOLUCA | RECORRE.CLUB</p>
     </footer>
 
-    <!-- PARTICLES.JS ESTILO TOKIO / MARATHON -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-        // ⏱️ RELOJ CUENTA REGRESIVA AL 1 DE NOVIEMBRE 2026 (07:45 AM)
         const eventDate = new Date('November 1, 2026 07:45:00').getTime();
 
         function updateCountdown() {
@@ -505,22 +489,22 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // 🔍 CONSULTA DE FOLIOS EN TIEMPO REAL VÍA APPS SCRIPT (v10)
+        // 🔍 CONSULTA DE FOLIOS EN TIEMPO REAL CON LA NUEVA URL
         async function buscarRegistro() {
             const queryInput = document.getElementById('queryInput');
             const btn = document.getElementById('btnBuscar');
             const msg = document.getElementById('msg-status');
-            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzpZXjVUwHC8sChMmcspEq7XuUCAZgO6_qZQKr8NohTxAegGz_80Jut8Aa2qEXCz18E/exec";
+            const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCpRefdUlFmU_ScdD8mGl_88XqaxLFTrANLU4Iyfoi5FQZLNpIgyNGGyTLWqNn4tiC/exec";
 
             const queryVal = queryInput.value.trim();
             if (queryVal.length < 3) {
-                msg.innerHTML = "<span style='color:var(--naranja)'>⚠️ Ingresa al menos 3 caracteres (Correo, Teléfono o Nombre).</span>";
+                msg.innerHTML = "<span style='color:var(--naranja); background:rgba(233,78,27,0.1); padding:8px 15px; border-radius:10px; display:inline-block;'>⚠️ Ingresa al menos 3 caracteres (Correo, Teléfono o Nombre).</span>";
                 return;
             }
 
             btn.disabled = true;
             btn.innerText = "BUSCANDO REGISTRO... ⏱️";
-            msg.innerText = "Consultando base de datos...";
+            msg.innerText = "Consultando en la base de datos oficial...";
             msg.style.color = "var(--azul)";
 
             try {
@@ -529,15 +513,20 @@
 
                 if (result.success && result.data && result.data.length > 0) {
                     let htmlList = `<div style="background:#f0fdf4; padding:20px; border-radius:20px; color:#16a34a; border: 1px solid #bbf7d0; text-align:left; margin-top:15px;">
-                        <h4 style="margin-bottom:10px; text-align:center;">✅ ¡Registro Encontrado!</h4>`;
+                        <h4 style="margin-bottom:12px; text-align:center; color:#15803d; font-size:1.1rem;">✅ ¡Registro(s) Encontrado(s)!</h4>`;
                     
                     result.data.forEach(item => {
                         htmlList += `
-                            <div style="background:white; padding:12px; border-radius:12px; margin-bottom:10px; border:1px solid #dcfce7; color:#333;">
-                                <strong>Folio:</strong> <span style="color:#c0392b; font-weight:900;">${item.folio}</span><br>
-                                <strong>Participante:</strong> ${item.nombre}<br>
-                                <strong>Tutor:</strong> ${item.tutor}<br>
-                                <strong>Categoría:</strong> ${item.categoria} (${item.distancia})
+                            <div style="background:white; padding:15px; border-radius:14px; margin-bottom:12px; border:1px solid #dcfce7; color:#333; box-shadow:0 4px 10px rgba(0,0,0,0.03);">
+                                <div style="font-size:1.2rem; font-weight:900; color:#c0392b; margin-bottom:5px;">
+                                    FOLIO: ${item.folio || 'PEQUE-REGISTRADO'}
+                                </div>
+                                <strong>Participante:</strong> ${item.nombre || 'N/A'}<br>
+                                <strong>Tutor:</strong> ${item.tutor || 'N/A'}<br>
+                                <strong>Categoría / Distancia:</strong> ${item.categoria || ''} ${item.distancia ? '(' + item.distancia + ')' : ''}<br>
+                                <div style="margin-top:8px; font-size:0.8rem; color:#666;">
+                                    📍 Sede: Pista del IMSS Toluca • Cita: 07:45 AM
+                                </div>
                             </div>
                         `;
                     });
@@ -545,17 +534,25 @@
                     htmlList += `</div>`;
                     msg.innerHTML = htmlList;
                 } else {
-                    msg.innerHTML = `<span style='color:var(--naranja)'>⚠️ No se encontraron registros coincidentes con "${queryVal}".</span>`;
+                    msg.innerHTML = `<div style="background:#fff5f5; padding:15px; border-radius:15px; color:#c0392b; border:1px solid #fed7d7; margin-top:15px;">
+                        ⚠️ No se encontraron folios asociados a "<strong>${queryVal}</strong>".<br>
+                        <small style="color:#718096;">Revisa la ortografía o consulta directamente por WhatsApp.</small>
+                    </div>`;
                 }
             } catch (error) {
-                msg.innerHTML = "<span style='color:var(--naranja)'>❌ Error de conexión al consultar el servidor.</span>";
+                console.error("Error al consultar la API:", error);
+                msg.innerHTML = `<div style="background:#fff5f5; padding:15px; border-radius:15px; color:#c0392b; border:1px solid #fed7d7; margin-top:15px;">
+                    ❌ No se pudo conectar con el servidor de búsqueda.<br>
+                    <a href="https://wa.me/525534421722?text=Hola,%20quiero%20consultar%20mi%20folio%20para%20${encodeURIComponent(queryVal)}" target="_blank" style="color:var(--verde); font-weight:bold; text-decoration:underline; display:inline-block; margin-top:8px;">
+                        Consultar Folio con el Bot de WhatsApp 📱
+                    </a>
+                </div>`;
             } finally {
                 btn.disabled = false;
                 btn.innerText = "BUSCAR MI FOLIO 🔍";
             }
         }
 
-        // 🌌 CONFIGURACIÓN DE PARTICULAS ESTILO TOKIO MARATHON
         particlesJS("particles-js", {
           "particles": {
             "number": { "value": 70, "density": { "enable": true, "value_area": 800 } },
