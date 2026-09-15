@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inscripción Oficial | Tu Peque Re-Corre Calaveritas de Azúcar 2026</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet" />
+
+    <style>
+        :root {
+            --morado: #8E44AD;
+            --naranja: #E94E1B;
+            --azul: #1D71B8;
+            --verde: #27AE60;
+            --fondo: #f8fafc;
+            --shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            background-color: var(--fondo); 
+            color: #333; 
+            line-height: 1.6;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 30px;
+            padding: 35px 25px;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(142, 68, 173, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.6rem;
+            color: var(--morado);
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .header p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--morado);
+            box-shadow: 0 0 10px rgba(142, 68, 173, 0.15);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg, var(--morado) 0%, #9b59b6 100%);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1rem;
+            width: 100%;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(142, 68, 173, 0.3);
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(142, 68, 173, 0.4);
+        }
+
+        .category-badge {
+            display: none;
+            background: #f3e8ff;
+            color: var(--morado);
+            padding: 10px 15px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            border: 1px solid #d8b4fe;
+        }
+
+        #msg-result {
+            margin-top: 25px;
+            text-align: center;
+        }
+
+        .success-box {
+            background: #f0fdf4;
+            border: 2px dashed var(--verde);
+            padding: 25px;
+            border-radius: 20px;
+            color: #166534;
+        }
+
+        .success-folio {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #c0392b;
+            margin: 15px 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="https://raw.githubusercontent.com/EdddGaar/pk26/ac26029600cee534b5388b1c495cb11f466e2fa5/mmail.png" alt="Banner Tu Peque Re-Corre 2026">
+            <h1>Formulario de Inscripción</h1>
+            <p>Tu Peque Re-Corre: Calaveritas de Azúcar 2026<br><strong>Domingo 1 de Noviembre, 2026 | Pista del IMSS, Toluca</strong></p>
+        </div>
+
+        <form id="regForm" onsubmit="procesarInscripcion(event)">
+            
+            <!-- 1. Nombre del Niño -->
+            <div class="form-group">
+                <label for="nombre">1. Nombre Completo del Participante (Niño/a) *</label>
+                <input type="text" id="nombre" class="form-control" placeholder="Ej. Mateo Mercado García" required>
+            </div>
+
+            <!-- 2. Edad -->
+            <div class="form-group">
+                <label for="edad">2. Edad del Participante (4 a 15 años) *</label>
+                <input type="number" id="edad" class="form-control" min="4" max="15" placeholder="Ej. 8" oninput="calcularCategoria()" required>
+                <div id="catPreview" class="category-badge"></div>
+            </div>
+
+            <!-- 3. Discapacidad -->
+            <div class="form-group">
+                <label for="discapacidad">3. ¿Cuenta con alguna discapacidad o condición especial? *</label>
+                <select id="discapacidad" class="form-control" onchange="toggleDiscapacidadDetalle()" required>
+                    <option value="No">No</option>
+                    <option value="Sí">Sí</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="groupDiscapacidadDetalle" style="display: none;">
+                <label for="discapacidadDetalle">Especifique la condición o apoyo requerido:</label>
+                <input type="text" id="discapacidadDetalle" class="form-control" placeholder="Ej. Motriz, Autismo, requiere apoyo de tutor">
+            </div>
+
+            <!-- 4. Nombre del Tutor -->
+            <div class="form-group">
+                <label for="tutor">4. Nombre Completo del Tutor Responsable *</label>
+                <input type="text" id="tutor" class="form-control" placeholder="Ej. Edgar Mercado" required>
+            </div>
+
+            <!-- 5. Teléfono -->
+            <div class="form-group">
+                <label for="telefono">5. Teléfono de Contacto (WhatsApp - 10 dígitos) *</label>
+                <input type="tel" id="telefono" class="form-control" pattern="[0-9]{10}" maxlength="10" placeholder="Ej. 7221234567" required>
+            </div>
+
+            <!-- 6. Correo Electrónico -->
+            <div class="form-group">
+                <label for="email">6. Correo Electrónico (Para recibir folio) *</label>
+                <input type="email" id="email" class="form-control" placeholder="tu-correo@ejemplo.com" required>
+            </div>
+
+            <button type="submit" id="btnSubmit" class="btn-submit">
+                COMPLETAR INSCRIPCIÓN 🏃‍♂️✨
+            </button>
+        </form>
+
+        <div id="msg-result"></div>
+
+        <footer>
+            RUNNING CLUB RE-CORRE TOLUCA | Causa Atlética y Social
+        </footer>
+    </div>
+
+    <script>
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzpZXjVUwHC8sChMmcspEq7XuUCAZgO6_qZQKr8NohTxAegGz_80Jut8Aa2qEXCz18E/exec";
+
+        function calcularCategoria() {
+            const edad = parseInt(document.getElementById('edad').value);
+            const badge = document.getElementById('catPreview');
+            
+            if (isNaN(edad) || edad < 4 || edad > 15) {
+                badge.style.display = "none";
+                return;
+            }
+
+            let catText = "";
+            if (edad <= 6) catText = "Categoría: VERDE (4 a 6 años) • Distancia: 100m";
+            else if (edad <= 8) catText = "Categoría: AMARILLO (7 a 8 años) • Distancia: 200m";
+            else if (edad <= 10) catText = "Categoría: AZUL (9 a 10 años) • Distancia: 400m";
+            else if (edad <= 13) catText = "Categoría: MORADO (11 a 13 años) • Distancia: 800m";
+            else catText = "Categoría: ROJO (14 a 15 años) • Distancia: 1600m";
+
+            badge.innerText = catText;
+            badge.style.display = "block";
+        }
+
+        function toggleDiscapacidadDetalle() {
+            const discVal = document.getElementById('discapacidad').value;
+            const groupDetail = document.getElementById('groupDiscapacidadDetalle');
+            groupDetail.style.display = (discVal === "Sí") ? "block" : "none";
+        }
+
+        async function procesarInscripcion(e) {
+            e.preventDefault();
+            
+            const btn = document.getElementById('btnSubmit');
+            const msg = document.getElementById('msg-result');
+            const form = document.getElementById('regForm');
+
+            const discVal = document.getElementById('discapacidad').value;
+            const discDetalle = document.getElementById('discapacidadDetalle').value;
+            const discFinal = (discVal === "Sí" && discDetalle.trim() !== "") ? `Sí (${discDetalle.trim()})` : discVal;
+
+            const payload = {
+                action: "registro",
+                nombre: document.getElementById('nombre').value.trim(),
+                edad: parseInt(document.getElementById('edad').value),
+                discapacidad: discFinal,
+                tutor: document.getElementById('tutor').value.trim(),
+                telefono: document.getElementById('telefono').value.trim(),
+                email: document.getElementById('email').value.trim()
+            };
+
+            btn.disabled = true;
+            btn.innerText = "PROCESANDO REGISTRO... ⏱️";
+            msg.innerHTML = "<p style='color:var(--azul); font-weight:700;'>Guardando inscripción y generando folio en el servidor...</p>";
+
+            try {
+                const response = await fetch(WEB_APP_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    form.style.display = "none";
+                    msg.innerHTML = `
+                        <div class="success-box">
+                            <h2>¡Inscripción Exitosa! 🎉</h2>
+                            <p>Hemos guardado tus datos y enviado un correo de confirmación a <strong>${payload.email}</strong>.</p>
+                            
+                            <div class="success-folio">${result.folio}</div>
+                            
+                            <p style="font-size:0.85rem; color:#555; margin-bottom:15px;">
+                                Presenta este folio en la mesa de control el día del evento a las <strong>07:45 AM</strong>.
+                            </p>
+
+                            <a href="https://wa.me/527299213873?text=Hola,%20mi%20folio%20es%20${result.folio}" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
+                                CONTINUAR EN WHATSAPP 📱
+                            </a>
+                        </div>
+                    `;
+                } else {
+                    msg.innerHTML = `<p style='color:var(--naranja); font-weight:700;'>⚠️ ${result.msg || "Error al procesar el registro."}</p>`;
+                    btn.disabled = false;
+                    btn.innerText = "COMPLETAR INSCRIPCIÓN 🏃‍♂️✨";
+                }
+            } catch (err) {
+                msg.innerHTML = "<p style='color:var(--naranja); font-weight:700;'>❌ Error de conexión al servidor. Revisa tu señal e intenta de nuevo.</p>";
+                btn.disabled = false;
+                btn.innerText = "COMPLETAR INSCRIPCIÓN 🏃‍♂️✨";
+            }
+        }
+    </script>
+</body>
+</html>
