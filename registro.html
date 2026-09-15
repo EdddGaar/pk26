@@ -199,7 +199,7 @@
 
             <!-- 5. Teléfono -->
             <div class="form-group">
-                <label for="telefono">5. Teléfono de Contacto (WhatsApp - 10 dígitos) *</label>
+                <label for="telefono">5. Teléfono de Contacto (10 dígitos) *</label>
                 <input type="tel" id="telefono" class="form-control" pattern="[0-9]{10}" maxlength="10" placeholder="Ej. 7221234567" required>
             </div>
 
@@ -289,7 +289,7 @@
                     msg.innerHTML = `
                         <div class="success-box">
                             <h2>¡Inscripción Exitosa! 🎉</h2>
-                            <p>Hemos guardado tus datos y enviado un correo de confirmación a <strong>${payload.email}</strong>.</p>
+                            <p>Hemos guardado tus datos en la base de datos y enviado un correo de confirmación a <strong>${payload.email}</strong>.</p>
                             
                             <div class="success-folio">${result.folio}</div>
                             
@@ -297,8 +297,8 @@
                                 Presenta este folio en la mesa de control el día del evento a las <strong>07:45 AM</strong>.
                             </p>
 
-                            <a href="https://wa.me/527299213873?text=Hola,%20mi%20folio%20es%20${result.folio}" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
-                                CONTINUAR EN WHATSAPP 📱
+                            <a href="https://wa.me/525534421722?text=Hola,%20mi%20folio%20es%20${result.folio}" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
+                                IR AL BOT DE WHATSAPP 📱
                             </a>
                         </div>
                     `;
