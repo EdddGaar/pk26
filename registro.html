@@ -138,13 +138,6 @@
             color: #166534;
         }
 
-        .success-folio {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #c0392b;
-            margin: 15px 0;
-        }
-
         footer {
             text-align: center;
             margin-top: 30px;
@@ -261,52 +254,50 @@
             const discDetalle = document.getElementById('discapacidadDetalle').value;
             const discFinal = (discVal === "Sí" && discDetalle.trim() !== "") ? `Sí (${discDetalle.trim()})` : discVal;
 
+            const emailUser = document.getElementById('email').value.trim();
+            const nombreNiño = document.getElementById('nombre').value.trim();
+
             const payload = {
                 action: "registro",
-                nombre: document.getElementById('nombre').value.trim(),
+                nombre: nombreNiño,
                 edad: parseInt(document.getElementById('edad').value),
                 discapacidad: discFinal,
                 tutor: document.getElementById('tutor').value.trim(),
                 telefono: document.getElementById('telefono').value.trim(),
-                email: document.getElementById('email').value.trim()
+                email: emailUser
             };
 
             btn.disabled = true;
             btn.innerText = "PROCESANDO REGISTRO... ⏱️";
-            msg.innerHTML = "<p style='color:var(--azul); font-weight:700;'>Guardando inscripción y generando folio en el servidor...</p>";
+            msg.innerHTML = "<p style='color:var(--azul); font-weight:700;'>Guardando inscripción y enviando correo de confirmación...</p>";
 
             try {
-                const response = await fetch(WEB_APP_URL, {
+                await fetch(WEB_APP_URL, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify(payload)
                 });
 
-                const result = await response.json();
-
-                if (result.success) {
-                    form.style.display = "none";
-                    msg.innerHTML = `
-                        <div class="success-box">
-                            <h2>¡Inscripción Exitosa! 🎉</h2>
-                            <p>Hemos guardado tus datos en la base de datos y enviado un correo de confirmación a <strong>${payload.email}</strong>.</p>
-                            
-                            <div class="success-folio">${result.folio}</div>
-                            
-                            <p style="font-size:0.85rem; color:#555; margin-bottom:15px;">
-                                Presenta este folio en la mesa de control el día del evento a las <strong>07:45 AM</strong>.
-                            </p>
-
-                            <a href="https://wa.me/525534421722?text=Hola,%20mi%20folio%20es%20${result.folio}" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
-                                IR AL BOT DE WHATSAPP 📱
-                            </a>
+                form.style.display = "none";
+                msg.innerHTML = `
+                    <div class="success-box">
+                        <h2>¡Inscripción Confirmada! 🎉</h2>
+                        <p>Hemos guardado los datos de <strong>${nombreNiño}</strong> y enviado el comprobante a <strong>${emailUser}</strong>.</p>
+                        
+                        <div style="font-size:1.3rem; font-weight:900; color:#27ae60; margin:15px 0;">
+                            ✅ Pase de competidor enviado a tu correo
                         </div>
-                    `;
-                } else {
-                    msg.innerHTML = `<p style='color:var(--naranja); font-weight:700;'>⚠️ ${result.msg || "Error al procesar el registro."}</p>`;
-                    btn.disabled = false;
-                    btn.innerText = "COMPLETAR INSCRIPCIÓN 🏃‍♂️✨";
-                }
+                        
+                        <p style="font-size:0.85rem; color:#555; margin-bottom:15px;">
+                            Revisa tu bandeja de entrada (Inbox). Preséntate a las <strong>07:45 AM</strong> el día del evento en la mesa de control.
+                        </p>
+
+                        <a href="https://wa.me/525534421722?text=Hola,%20acabo%20de%20inscribirme%20en%20el%20sitio%20web" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
+                            CONTINUAR EN WHATSAPP 📱
+                        </a>
+                    </div>
+                `;
             } catch (err) {
                 msg.innerHTML = "<p style='color:var(--naranja); font-weight:700;'>❌ Error de conexión al servidor. Revisa tu señal e intenta de nuevo.</p>";
                 btn.disabled = false;
