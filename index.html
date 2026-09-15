@@ -213,8 +213,25 @@
             text-transform: uppercase;
             transition: all 0.3s;
             box-shadow: 0 12px 25px rgba(39, 174, 96, 0.3);
+            margin-top: 15px;
         }
         .wa-direct-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(39, 174, 96, 0.4); }
+
+        .web-reg-btn {
+            background: linear-gradient(135deg, var(--naranja) 0%, #ff7c52 100%);
+            color: white;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: 900;
+            display: block;
+            width: 100%;
+            font-size: 1rem;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 12px 25px rgba(233, 78, 27, 0.3);
+        }
+        .web-reg-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(233, 78, 27, 0.4); }
 
         .info-grid {
             display: grid;
@@ -276,7 +293,7 @@
             <img src="https://raw.githubusercontent.com/EdddGaar/pk26/a88ad74e221f1707b77eb548878cdff8587ffa1b/Re%20corre%20Logo.jpg" alt="Re Corre Logo" class="nav-logo">
         </a>
         <div class="nav-links">
-            <a href="#inscribir">Inscripción</a>
+            <a href="registro.html">Inscripción Web</a>
             <a href="#buscar">Consultar Folio</a>
             <a href="#galeria">Galería</a>
             <a href="#info">Detalles</a>
@@ -300,7 +317,7 @@
                     CONSULTA TU NÚMERO DE FOLIO 🎟️
                 </h3>
                 <p style="font-size: 0.9rem; margin-bottom: 25px; color: #555;">
-                    Ingresa tu correo electrónico, teléfono (10 dígitos) o nombre del participante para recuperar los datos de tu inscripción.
+                    Ingresa tu correo electrónico, teléfono (10 dígitos) o nombre del participante para recuperar tu folio de inscripción.
                 </p>
                 
                 <input type="text" id="queryInput" class="cert-input" placeholder="Correo, Teléfono o Nombre">
@@ -309,12 +326,18 @@
                     BUSCAR MI FOLIO 🔍
                 </button>
 
-                <div style="margin: 20px 0; font-size: 0.85rem; color: #777; font-weight: 700;">
-                    — O TAMBIÉN PUEDES —
+                <div style="margin: 25px 0 15px; font-size: 0.85rem; color: #777; font-weight: 700;">
+                    — OPCIONES DE INSCRIPCIÓN OFICIAL —
                 </div>
 
-                <a href="https://wa.me/527299213873?text=Inscribirme" target="_blank" class="wa-direct-btn">
-                    INSCRIBIRTE O CONSULTAR VÍA WHATSAPP 📱
+                <!-- Botón Formulario Web -->
+                <a href="registro.html" class="web-reg-btn">
+                    INSCRIBIRTE VÍA FORMULARIO WEB 📝
+                </a>
+
+                <!-- Botón WhatsApp Bot con el número oficial -->
+                <a href="https://wa.me/525534421722?text=Inscribirme" target="_blank" class="wa-direct-btn">
+                    INSCRIBIRTE VÍA WHATSAPP BOT 📱
                 </a>
                 
                 <div id="msg-status"></div>
@@ -363,7 +386,7 @@
     <footer>
         <div style="margin-bottom: 25px;">
             <a href="https://www.facebook.com/share/1FAi9NEt5k/" target="_blank" class="btn-social btn-fb">FACEBOOK OFICIAL</a>
-            <a href="https://wa.me/527299213873" target="_blank" class="btn-social btn-wa">CONTACTAR POR WHATSAPP</a>
+            <a href="https://wa.me/525534421722" target="_blank" class="btn-social btn-wa">CONTACTAR POR WHATSAPP</a>
         </div>
         <p style="font-weight: 900; color: var(--morado);">TU PEQUE RE-CORRE 2026</p>
         <p style="margin-top: 5px; font-size: 0.75rem; color: #94a3b8;">🏁 RUNNING CLUB RE-CORRE TOLUCA | RECORRE.CLUB</p>
