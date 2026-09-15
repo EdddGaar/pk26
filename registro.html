@@ -130,7 +130,7 @@
             text-align: center;
         }
 
-        /* 🟢 DISEÑO ESTILO CORREO DE CONFIRMACIÓN CON FOLIO */
+        /* 🟢 TARJETA DE CONFIRMACIÓN Y CORREO */
         .confirm-card {
             background: #ffffff;
             border: 1px solid #e5e5e5;
@@ -140,17 +140,21 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
-        .folio-box {
+        .email-notice-box {
             text-align: center;
-            font-size: 1.8rem;
-            font-weight: 900;
-            padding: 15px;
-            background: #f8f9fa;
-            border: 2px dashed #c0392b;
-            border-radius: 12px;
+            padding: 20px;
+            background: #f0fdf4;
+            border: 2px dashed #27ae60;
+            border-radius: 16px;
             margin: 20px 0;
-            color: #c0392b;
-            letter-spacing: 1px;
+            color: #14532d;
+        }
+
+        .email-notice-box h4 {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #27ae60;
+            margin-bottom: 8px;
         }
 
         .checkin-notice {
@@ -175,6 +179,27 @@
             padding: 10px;
             border-bottom: 1px solid #eee;
         }
+
+        .btn-action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            padding: 14px 20px;
+            border-radius: 30px;
+            font-weight: 900;
+            font-size: 0.88rem;
+            transition: transform 0.2s;
+        }
+        .btn-action:hover { transform: translateY(-2px); }
+        .btn-wa { background: var(--verde); color: white; box-shadow: 0 8px 18px rgba(39, 174, 96, 0.3); }
+        .btn-search { background: var(--azul); color: white; box-shadow: 0 8px 18px rgba(29, 113, 184, 0.3); }
 
         footer {
             text-align: center;
@@ -283,25 +308,6 @@
             groupDetail.style.display = (discVal === "Sí") ? "block" : "none";
         }
 
-        async function obtenerFolioConReintentos(email, nombre, reintentos = 3) {
-            for (let i = 0; i < reintentos; i++) {
-                await new Promise(r => setTimeout(r, 2000 + (i * 1000)));
-                try {
-                    const res = await fetch(`${WEB_APP_URL}?action=buscar&query=${encodeURIComponent(email)}`);
-                    const searchData = await res.json();
-                    if (searchData.success && searchData.data && searchData.data.length > 0) {
-                        const match = searchData.data.find(d => d.nombre.toLowerCase().includes(nombre.toLowerCase())) || searchData.data[searchData.data.length - 1];
-                        if (match && match.folio && match.folio !== "") {
-                            return match.folio;
-                        }
-                    }
-                } catch (err) {
-                    console.log(`Intento ${i + 1} fallido...`);
-                }
-            }
-            return null;
-        }
-
         async function procesarInscripcion(e) {
             e.preventDefault();
             
@@ -331,11 +337,11 @@
             };
 
             btn.disabled = true;
-            btn.innerText = "PROCESANDO REGISTRO... ⏱️";
-            msg.innerHTML = "<p style='color:var(--azul); font-weight:700; text-align:center;'>Guardando inscripción y consultando tu folio oficial...</p>";
+            btn.innerText = "ENVIANDO INSCRIPCIÓN... ⏱️";
+            msg.innerHTML = "<p style='color:var(--azul); font-weight:700; text-align:center;'>Guardando registro en la base de datos...</p>";
 
             try {
-                // 1. Enviar datos POST a Google Apps Script
+                // Enviar datos POST a Google Apps Script
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -343,16 +349,11 @@
                     body: JSON.stringify(payload)
                 });
 
-                // 2. Intentar recuperar el Folio en tiempo real
-                let folioAsignado = await obtenerFolioConReintentos(emailUser, nombreNiño);
-                const textoFolio = folioAsignado ? `FOLIO: ${folioAsignado}` : `FOLIO ENVIADO A TU CORREO`;
-                const waTexto = folioAsignado ? `Hola,%20mi%20folio%20es%20${folioAsignado}%20para%20${encodeURIComponent(nombreNiño)}` : `Hola,%20acabo%20de%20inscribir%20a%20${encodeURIComponent(nombreNiño)}`;
-
-                // 3. Mostrar resumen idéntico al correo oficial
+                // Ocultar formulario y desplegar confirmación clara
                 form.style.display = "none";
                 msg.innerHTML = `
                     <div class="confirm-card">
-                        <h2 style="color:var(--morado); text-align:center; font-size:1.4rem; margin-bottom:5px;">¡Inscripción Confirmada! 🎉</h2>
+                        <h2 style="color:var(--morado); text-align:center; font-size:1.4rem; margin-bottom:5px;">¡Inscripción Exitosa! 🎉</h2>
                         <h3 style="text-align:center; font-size:1rem; color:#555; font-weight:700; margin-bottom:15px;">Tu Peque Re-Corre Calaveritas de Azúcar 2026</h3>
 
                         <p style="font-size:0.95rem;">Hola <strong>${tutorNiño || "Tutor"}</strong>,</p>
@@ -360,18 +361,29 @@
                             Hemos recibido correctamente la inscripción de <strong>${nombreNiño}</strong> para participar en la gran carrera infantil.
                         </p>
 
-                        <!-- Folio Destacado -->
-                        <div class="folio-box">
-                            NÚMERO DE ${textoFolio}
+                        <!-- Aviso de Envío a Correo -->
+                        <div class="email-notice-box">
+                            <h4>📧 ¡Tu Folio Oficial Ha Sido Enviado!</h4>
+                            <p style="font-size:0.88rem; margin-top:5px;">
+                                Enviaremos tu comprobante con el número de folio asignado al correo:<br>
+                                <strong>${emailUser}</strong>
+                            </p>
+                            <p style="font-size:0.8rem; color:#666; margin-top:8px;">
+                                💡 <em>Si no lo encuentras en tu Bandeja de Entrada en 1 minuto, recuerda revisar tu carpeta de <strong>SPAM o Correo No Deseado</strong>.</em>
+                            </p>
                         </div>
 
                         <!-- Indicaciones de Check-in -->
                         <div class="checkin-notice">
-                            <strong>HORARIO DE CHECK-IN:</strong> Favor de presentarse a las <strong>07:45 AM</strong> con este número de competidor en la mesa de control para realizar su check-in y recibir su paquete.
+                            <strong>HORARIO DE CHECK-IN:</strong> Favor de presentarse a las <strong>07:45 AM</strong> el día del evento en la mesa de control con tu folio para realizar su check-in y recibir su paquete.
                         </div>
 
                         <!-- Tabla de Datos Oficial -->
                         <table class="data-table">
+                            <tr>
+                                <td><strong>Participante:</strong></td>
+                                <td>${nombreNiño}</td>
+                            </tr>
                             <tr>
                                 <td><strong>Categoría:</strong></td>
                                 <td>${catInfo.cat}</td>
@@ -394,13 +406,13 @@
                             </tr>
                         </table>
 
-                        <p style="text-align:center; font-size:0.85rem; color:#27ae60; font-weight:700; margin-bottom:15px;">
-                            ✅ Copia de este pase enviada a tu correo (${emailUser})
-                        </p>
-
-                        <div style="text-align:center;">
-                            <a href="https://wa.me/525534421722?text=${waTexto}" target="_blank" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:14px 28px; border-radius:30px; font-weight:700; font-size:0.9rem; box-shadow:0 8px 18px rgba(39, 174, 96, 0.3);">
-                                IR A WHATSAPP CON MI FOLIO 📱
+                        <!-- Botones de Acción -->
+                        <div class="btn-action-group">
+                            <a href="index.html#buscar" class="btn-action btn-search">
+                                BUSCAR / CONSULTAR MI FOLIO EN LA WEB 🔍
+                            </a>
+                            <a href="https://wa.me/525534421722?text=Hola,%20acabo%20de%20inscribir%20a%20${encodeURIComponent(nombreNiño)}%20y%20quiero%20confirmar%20mi%20folio" target="_blank" class="btn-action btn-wa">
+                                CONSULTAR VÍA WHATSAPP BOT 📱
                             </a>
                         </div>
                     </div>
