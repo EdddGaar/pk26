@@ -130,36 +130,50 @@
             text-align: center;
         }
 
-        .success-box {
-            background: #f0fdf4;
-            border: 2px dashed var(--verde);
-            padding: 25px;
+        /* 🟢 DISEÑO ESTILO CORREO DE CONFIRMACIÓN */
+        .confirm-card {
+            background: #ffffff;
+            border: 1px solid #e5e5e5;
             border-radius: 20px;
-            color: #166534;
+            padding: 25px;
             text-align: left;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
 
-        .folio-highlight {
-            font-size: 2.2rem;
-            font-weight: 900;
-            color: #c0392b;
+        .folio-box {
             text-align: center;
-            background: #fff;
-            padding: 12px;
-            border-radius: 15px;
+            font-size: 1.8rem;
+            font-weight: 900;
+            padding: 15px;
+            background: #f8f9fa;
             border: 2px dashed #c0392b;
-            margin: 15px 0;
-            letter-spacing: 2px;
+            border-radius: 12px;
+            margin: 20px 0;
+            color: #c0392b;
+            letter-spacing: 1px;
         }
 
-        .summary-card {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #bbf7d0;
-            margin: 15px 0;
-            font-size: 0.88rem;
-            color: #333;
+        .checkin-notice {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffa000;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            color: #7f5000;
+            line-height: 1.4;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .data-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
         }
 
         footer {
@@ -241,12 +255,12 @@
     <script>
         const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzpZXjVUwHC8sChMmcspEq7XuUCAZgO6_qZQKr8NohTxAegGz_80Jut8Aa2qEXCz18E/exec";
 
-        function getCatText(edad) {
-            if (edad <= 6) return "VERDE (4 a 6 años) • 100m";
-            if (edad <= 8) return "AMARILLO (7 a 8 años) • 200m";
-            if (edad <= 10) return "AZUL (9 a 10 años) • 400m";
-            if (edad <= 13) return "MORADO (11 a 13 años) • 800m";
-            return "ROJO (14 a 15 años) • 1600m";
+        function getCategoryData(edad) {
+            if (edad <= 6) return { cat: "VERDE (4 a 6 años)", dist: "100m" };
+            if (edad <= 8) return { cat: "AMARILLO (7 a 8 años)", dist: "200m" };
+            if (edad <= 10) return { cat: "AZUL (9 a 10 años)", dist: "400m" };
+            if (edad <= 13) return { cat: "MORADO (11 a 13 años)", dist: "800m" };
+            return { cat: "ROJO (14 a 15 años)", dist: "1,600m" };
         }
 
         function calcularCategoria() {
@@ -258,7 +272,8 @@
                 return;
             }
 
-            badge.innerText = "Categoría: " + getCatText(edad);
+            const info = getCategoryData(edad);
+            badge.innerText = `Categoría: ${info.cat} • Distancia: ${info.dist}`;
             badge.style.display = "block";
         }
 
@@ -284,7 +299,7 @@
             const tutorNiño = document.getElementById('tutor').value.trim();
             const telNiño = document.getElementById('telefono').value.trim();
             const emailUser = document.getElementById('email').value.trim();
-            const catInfo = getCatText(edadNiño);
+            const catInfo = getCategoryData(edadNiño);
 
             const payload = {
                 action: "registro",
@@ -298,10 +313,10 @@
 
             btn.disabled = true;
             btn.innerText = "PROCESANDO REGISTRO... ⏱️";
-            msg.innerHTML = "<p style='color:var(--azul); font-weight:700; text-align:center;'>Guardando inscripción y consultando tu folio asignado...</p>";
+            msg.innerHTML = "<p style='color:var(--azul); font-weight:700; text-align:center;'>Guardando inscripción y obteniendo folio oficial...</p>";
 
             try {
-                // 1. Enviar el registro a Google Apps Script
+                // 1. Enviar datos a Apps Script
                 await fetch(WEB_APP_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -309,58 +324,78 @@
                     body: JSON.stringify(payload)
                 });
 
-                // 2. Esperar 1.5 segundos para dar tiempo a que la fila se guarde en Google Sheets
-                await new Promise(r => setTimeout(r, 1500));
+                // 2. Esperar 1.8 segundos para dar tiempo a la escritura en Google Sheet
+                await new Promise(r => setTimeout(r, 1800));
 
-                // 3. Consultar la API por GET para obtener el Folio en tiempo real
-                let folioObtenido = "REGISTRADO";
+                // 3. Consultar la API por GET para obtener el Folio asignado
+                let folioAsignado = "FOLIO GENERADO";
                 try {
-                    const searchRes = await fetch(`${WEB_APP_URL}?action=buscar&query=${encodeURIComponent(emailUser)}`);
-                    const searchData = await searchRes.json();
+                    const res = await fetch(`${WEB_APP_URL}?action=buscar&query=${encodeURIComponent(emailUser)}`);
+                    const searchData = await res.json();
                     
                     if (searchData.success && searchData.data && searchData.data.length > 0) {
-                        // Buscar la coincidencia por nombre o tomar el último registrado
-                        const match = searchData.data.find(item => item.nombre.toLowerCase().includes(nombreNiño.toLowerCase())) || searchData.data[searchData.data.length - 1];
-                        if (match && match.folio) {
-                            folioObtenido = match.folio;
+                        // Buscar el registro exacto o tomar el más reciente
+                        const item = searchData.data.find(d => d.nombre.toLowerCase().includes(nombreNiño.toLowerCase())) || searchData.data[searchData.data.length - 1];
+                        if (item && item.folio) {
+                            folioAsignado = item.folio;
                         }
                     }
-                } catch (e) {
-                    console.log("No se pudo obtener el folio por GET, se muestra mensaje estándar");
+                } catch (err) {
+                    console.log("No se pudo obtener el folio vía GET.");
                 }
 
-                // 4. Mostrar resultado con el Folio destacado
+                // 4. Renderizar la vista idéntica al correo electrónico
                 form.style.display = "none";
                 msg.innerHTML = `
-                    <div class="success-box">
-                        <h2 style="text-align:center;">¡Inscripción Exitosa! 🎉</h2>
-                        <p style="text-align:center; font-size:0.9rem; margin-top:5px;">
-                            Tu registro se ha completado correctamente en el sistema.
+                    <div class="confirm-card">
+                        <h2 style="color:var(--morado); text-align:center; font-size:1.4rem; margin-bottom:5px;">¡Inscripción Confirmada! 🎉</h2>
+                        <h3 style="text-align:center; font-size:1rem; color:#555; font-weight:700; margin-bottom:15px;">Tu Peque Re-Corre Calaveritas de Azúcar 2026</h3>
+
+                        <p style="font-size:0.95rem;">Hola <strong>${tutorNiño || "Tutor"}</strong>,</p>
+                        <p style="font-size:0.9rem; color:#444; margin-top:5px;">
+                            Hemos recibido correctamente la inscripción de <strong>${nombreNiño}</strong> para participar en la gran carrera infantil.
                         </p>
-                        
-                        <div class="folio-highlight">
-                            FOLIO: ${folioObtenido}
+
+                        <!-- Folio Destacado -->
+                        <div class="folio-box">
+                            NÚMERO DE FOLIO: ${folioAsignado}
                         </div>
 
-                        <div class="summary-card">
-                            <strong>Resumen del Registro:</strong><br>
-                            👤 <strong>Participante:</strong> ${nombreNiño}<br>
-                            🎽 <strong>Categoría:</strong> ${catInfo}<br>
-                            👨‍👩‍👧 <strong>Tutor:</strong> ${tutorNiño}<br>
-                            📱 <strong>Teléfono:</strong> ${telNiño}<br>
-                            📧 <strong>Correo:</strong> ${emailUser}
+                        <!-- Indicaciones de Check-in -->
+                        <div class="checkin-notice">
+                            <strong>HORARIO DE CHECK-IN:</strong> Favor de presentarse a las <strong>07:45 AM</strong> con este número de competidor en la mesa de control para realizar su check-in y recibir su paquete.
                         </div>
 
-                        <div style="text-align:center; font-size:0.9rem; font-weight:900; color:#27ae60; margin:15px 0;">
-                            ✅ Pase digital enviado a tu correo (Inbox)
-                        </div>
-                        
-                        <p style="font-size:0.8rem; color:#555; margin-bottom:15px; text-align:center;">
-                            Favor de presentarse a las <strong>07:45 AM</strong> el día del evento en la mesa de control de la Pista del IMSS con este número de folio.
+                        <!-- Tabla de Datos Oficial -->
+                        <table class="data-table">
+                            <tr>
+                                <td><strong>Categoría:</strong></td>
+                                <td>${catInfo.cat}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Distancia:</strong></td>
+                                <td>${catInfo.dist}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fecha:</strong></td>
+                                <td>Domingo 1 de Noviembre de 2026</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Horario de Carrera:</strong></td>
+                                <td>08:00 AM a 10:00 AM</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Lugar / Sede:</strong></td>
+                                <td>Pista del IMSS, Toluca, Estado de México</td>
+                            </tr>
+                        </table>
+
+                        <p style="text-align:center; font-size:0.85rem; color:#27ae60; font-weight:700; margin-bottom:15px;">
+                            ✅ Copia de este pase enviada a tu correo (${emailUser})
                         </p>
 
                         <div style="text-align:center;">
-                            <a href="https://wa.me/525534421722?text=Hola,%20mi%20folio%20es%20${folioObtenido}%20para%20${encodeURIComponent(nombreNiño)}" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:12px 25px; border-radius:30px; font-weight:700; font-size:0.85rem;">
+                            <a href="https://wa.me/525534421722?text=Hola,%20mi%20folio%20es%20${folioAsignado}%20para%20${encodeURIComponent(nombreNiño)}" target="_blank" style="display:inline-block; background:var(--verde); color:white; text-decoration:none; padding:14px 28px; border-radius:30px; font-weight:700; font-size:0.9rem; box-shadow:0 8px 18px rgba(39, 174, 96, 0.3);">
                                 IR A WHATSAPP CON MI FOLIO 📱
                             </a>
                         </div>
