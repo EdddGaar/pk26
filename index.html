@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet" />
 
+    <!-- 📊 Chart.js para las gráficas interactivas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
             --azul: #1D71B8;
@@ -153,27 +156,36 @@
             text-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
         }
 
-        .gender-bar-container {
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            height: 24px;
-            overflow: hidden;
-            display: flex;
-            margin: 20px 0 10px;
-            border: 1px solid rgba(255,255,255,0.15);
+        /* 📈 SECCIÓN DE GRÁFICAS */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
 
-        .gender-boys { background: var(--azul); height: 100%; transition: width 1s ease; }
-        .gender-girls { background: #E91E63; height: 100%; transition: width 1s ease; }
-        .gender-inc { background: #7f8c8d; height: 100%; transition: width 1s ease; }
+        .chart-card {
+            background: var(--card-dark);
+            border-radius: 25px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
 
-        .gender-legend {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-size: 0.85rem;
-            font-weight: 700;
+        .chart-card h4 {
+            color: var(--amarillo);
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
         }
 
         .cat-grid {
@@ -318,7 +330,6 @@
         }
         .cert-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(142, 68, 173, 0.4); }
 
-        /* 📸 GALERÍA LIMPIA DE EVENTOS ANTERIORES */
         .eventos-anteriores {
             margin: 50px auto;
             max-width: 1000px;
@@ -482,16 +493,21 @@
                 <h3 style="text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; color: #cbd5e1;">Padrón Oficial de Participantes</h3>
                 <div class="main-stat-number">568</div>
                 <p style="font-weight: 700; font-size: 1.1rem; color: #fff;">PEQUES LISTOS PARA CORRER 🏃‍♂️🏃‍♀️</p>
-                
-                <div class="gender-bar-container">
-                    <div class="gender-boys" style="width: 51.6%;" title="Niños: 51.6%"></div>
-                    <div class="gender-girls" style="width: 46.1%;" title="Niñas: 46.1%"></div>
-                    <div class="gender-inc" style="width: 2.3%;" title="Incompletos: 2.3%"></div>
+            </div>
+
+            <!-- 📊 NUEVAS GRÁFICAS INTERACTIVAS CON CHART.JS -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h4>Distribución por Categorías</h4>
+                    <div class="chart-container">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
                 </div>
-                <div class="gender-legend">
-                    <span style="color: var(--azul);">👦 293 Niños (51.6%)</span>
-                    <span style="color: #E91E63;">👧 262 Niñas (46.1%)</span>
-                    <span style="color: #a0aec0;">📝 13 En proceso de validación (2.3%)</span>
+                <div class="chart-card">
+                    <h4>Participación por Género</h4>
+                    <div class="chart-container">
+                        <canvas id="genderChart"></canvas>
+                    </div>
                 </div>
             </div>
 
@@ -553,7 +569,7 @@
                 </div>
             </div>
 
-            <!-- DESGLOSE POR EDAD Y ATENCIÓN INCLUSIVA -->
+            <!-- DESGLOSE POR EDAD -->
             <div class="detail-table-card">
                 <h4 style="color: var(--amarillo); font-size: 1.2rem; margin-bottom: 10px;">🎂 Distribución Exacta por Edad Individual</h4>
                 <div class="age-grid">
@@ -570,16 +586,6 @@
                     <div class="age-item"><span>32</span> 14 años</div>
                     <div class="age-item"><span>20</span> 15 años</div>
                 </div>
-            </div>
-
-            <div class="detail-table-card" style="border-left: 5px solid var(--azul);">
-                <h4 style="color: var(--azul); font-size: 1.2rem; margin-bottom: 8px;">🤝 Deporte Inclusivo & Familias Re-Corre</h4>
-                <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
-                    • <strong>Atención e Inclusión Especial:</strong> Contaremos con la participación de <strong>7 peques</strong> con apoyo personalizado para garantizar su carrera.
-                </p>
-                <p style="font-size: 0.88rem; color: #cbd5e1;">
-                    • <strong>Compromiso Familiar Destacado:</strong> Reconocimiento especial a las familias con mayor número de inscritos registrados (Tutores: Vianca B. A. con 10 peques; Alejandro F. F., César D., Ana L. T., Elizabeth D. M., Carolina B. Q. con 4 peques c/u; Mariela G. V., Mirella C. G., Norma L. A., César A. R. con 3 peques c/u).
-                </p>
             </div>
         </section>
 
@@ -682,6 +688,60 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
+        // 📊 INICIALIZACIÓN DE GRÁFICAS CON CHART.JS
+        document.addEventListener("DOMContentLoaded", function() {
+            // Gráfica Circular de Categorías
+            const ctxCat = document.getElementById('categoryChart').getContext('2d');
+            new Chart(ctxCat, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Verde (4-6)', 'Morado (11-13)', 'Amarillo (7-8)', 'Rojo (9-10)', 'Verde Juv. (13-15)'],
+                    datasets: [{
+                        data: [172, 127, 113, 104, 52],
+                        backgroundColor: ['#27AE60', '#8E44AD', '#F1C40F', '#E74C3C', '#1D71B8'],
+                        borderWidth: 2,
+                        borderColor: '#1a1c23'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#ffffff', font: { family: 'Montserrat', size: 11 } }
+                        }
+                    }
+                }
+            });
+
+            // Gráfica de Barras de Género
+            const ctxGender = document.getElementById('genderChart').getContext('2d');
+            new Chart(ctxGender, {
+                type: 'bar',
+                data: {
+                    labels: ['Niños 👦', 'Niñas 👧', 'En proceso 📝'],
+                    datasets: [{
+                        label: 'Participantes',
+                        data: [293, 262, 13],
+                        backgroundColor: ['#1D71B8', '#E91E63', '#7f8c8d'],
+                        borderRadius: 12
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { ticks: { color: '#ffffff', font: { family: 'Montserrat' } }, grid: { display: false } },
+                        y: { ticks: { color: '#ffffff', font: { family: 'Montserrat' } }, grid: { color: 'rgba(255, 255, 255, 0.1)' } }
+                    }
+                }
+            });
+        });
+
         // 🔍 CONSULTA DE FOLIOS EN TIEMPO REAL (PROTECCIÓN DE DATOS APLICADA)
         async function buscarRegistro() {
             const queryInput = document.getElementById('queryInput');
@@ -709,7 +769,6 @@
                         <h4 style="margin-bottom:12px; text-align:center; color:#15803d; font-size:1.1rem;">✅ ¡Registro(s) Encontrado(s)!</h4>`;
                     
                     result.data.forEach(item => {
-                        // Formatear primer nombre únicamente para protección de menor
                         const nombreCompleto = (item.nombre || 'N/A').trim().split(' ');
                         const primerNombre = nombreCompleto[0] || 'Peque';
 
