@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tu Peque Re-Corre Calaveritas de Azúcar 2026 | Evento Agotado</title>
+    <title>Tu Peque Re-Corre Calaveritas de Azúcar 2026 | Estadísticas Oficiales</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -30,9 +30,7 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body { 
             font-family: 'Montserrat', sans-serif; 
@@ -85,7 +83,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 🚀 HERO SECTION */
         .hero {
             padding: 50px 20px 30px;
             text-align: center;
@@ -102,9 +99,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             transition: transform 0.4s ease;
         }
-        .hero img.banner:hover {
-            transform: scale(1.015) translateY(-4px);
-        }
+        .hero img.banner:hover { transform: scale(1.015) translateY(-4px); }
 
         .section-title {
             font-size: clamp(2rem, 6vw, 3.2rem);
@@ -132,11 +127,7 @@
             box-shadow: 0 0 15px rgba(231, 76, 60, 0.2);
         }
 
-        /* 📊 DASHBOARD & STATS STYLING */
-        .stats-section {
-            margin: 50px auto;
-            max-width: 1000px;
-        }
+        .stats-section { margin: 50px auto; max-width: 1000px; }
 
         .main-stat-card {
             background: linear-gradient(135deg, rgba(142, 68, 173, 0.2) 0%, rgba(29, 113, 184, 0.2) 100%);
@@ -157,7 +148,6 @@
             text-shadow: 0 0 25px rgba(241, 196, 15, 0.3);
         }
 
-        /* 📈 SECCIÓN DE GRÁFICAS */
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -183,11 +173,7 @@
             letter-spacing: 0.5px;
         }
 
-        .chart-container {
-            position: relative;
-            height: 280px;
-            width: 100%;
-        }
+        .chart-container { position: relative; height: 280px; width: 100%; }
 
         .cat-grid {
             display: grid;
@@ -213,12 +199,7 @@
         .cat-card.amarillo { border-top: 5px solid var(--amarillo); }
         .cat-card.rojo { border-top: 5px solid var(--rojo); }
 
-        .cat-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
+        .cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .cat-title { font-weight: 900; font-size: 1.1rem; }
         .cat-count { font-size: 1.8rem; font-weight: 900; color: #fff; }
 
@@ -265,10 +246,7 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
             transition: transform 0.3s ease, border-color 0.3s ease;
         }
-        .timer-block:hover {
-            transform: translateY(-5px);
-            border-color: var(--amarillo);
-        }
+        .timer-block:hover { transform: translateY(-5px); border-color: var(--amarillo); }
         .timer-number {
             font-size: clamp(1.8rem, 4vw, 2.8rem);
             font-weight: 900;
@@ -295,7 +273,6 @@
             box-shadow: var(--shadow);
             text-align: center;
             animation: fadeInUp 1.1s ease-out;
-            transition: transform 0.3s ease;
         }
 
         .cert-input {
@@ -309,11 +286,7 @@
             transition: all 0.3s;
             text-align: center;
         }
-        .cert-input:focus {
-            outline: none;
-            border-color: var(--morado);
-            box-shadow: 0 0 12px rgba(142, 68, 173, 0.2);
-        }
+        .cert-input:focus { outline: none; border-color: var(--morado); box-shadow: 0 0 12px rgba(142, 68, 173, 0.2); }
 
         .cert-btn {
             background: linear-gradient(135deg, var(--morado) 0%, #9b59b6 100%);
@@ -332,24 +305,10 @@
         .cert-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(142, 68, 173, 0.4); }
         .cert-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
 
-        .eventos-anteriores {
-            margin: 60px auto;
-            max-width: 1000px;
-            text-align: center;
-        }
-        .eventos-anteriores h3 {
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--amarillo);
-            text-transform: uppercase;
-            margin-bottom: 30px;
-        }
+        .eventos-anteriores { margin: 60px auto; max-width: 1000px; text-align: center; }
+        .eventos-anteriores h3 { font-size: 1.8rem; font-weight: 900; color: var(--amarillo); text-transform: uppercase; margin-bottom: 30px; }
 
-        .galeria-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
+        .galeria-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 
         .card-evento {
             position: relative;
@@ -360,21 +319,9 @@
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
             background: #1a1c23;
         }
-        .card-evento:hover { 
-            transform: translateY(-10px) scale(1.02); 
-            box-shadow: 0 15px 35px rgba(142, 68, 173, 0.3);
-        }
-
-        .card-evento img {
-            width: 100%;
-            height: 260px;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-        .card-evento:hover img {
-            transform: scale(1.05);
-        }
+        .card-evento:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 15px 35px rgba(142, 68, 173, 0.3); }
+        .card-evento img { width: 100%; height: 260px; object-fit: cover; display: block; transition: transform 0.5s ease; }
+        .card-evento:hover img { transform: scale(1.05); }
 
         .info-grid {
             display: grid;
@@ -393,9 +340,7 @@
             border-bottom: 6px solid var(--morado);
             transition: transform 0.3s ease;
         }
-        .support-card:hover {
-            transform: translateY(-5px);
-        }
+        .support-card:hover { transform: translateY(-5px); }
         .support-card h4 { color: var(--morado); margin-bottom: 10px; font-weight: 900; }
         .support-card p { font-size: 0.85rem; color: #555; }
 
@@ -413,12 +358,7 @@
         }
         .map-btn:hover { background: #155892; }
 
-        footer {
-            background: #08090b;
-            padding: 50px 20px;
-            text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
+        footer { background: #08090b; padding: 50px 20px; text-align: center; border-top: 1px solid rgba(255,255,255,0.05); }
         
         .btn-social {
             text-decoration: none;
@@ -489,11 +429,11 @@
             </div>
         </section>
 
-        <!-- 📊 DASHBOARD DE CIFRAS E INSCRITOS -->
+        <!-- 📊 DASHBOARD DE CIFRAS OFICIALES -->
         <section id="stats" class="stats-section parallax-layer" data-speed="0.03">
             <div class="main-stat-card">
                 <h3 style="text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; color: #cbd5e1;">Padrón Oficial de Participantes Confirmados</h3>
-                <div class="main-stat-number">555</div>
+                <div class="main-stat-number">568</div>
                 <p style="font-weight: 700; font-size: 1.1rem; color: #fff;">PEQUES LISTOS PARA CORRER 🏃‍♂️🏃‍♀️</p>
             </div>
 
@@ -510,19 +450,20 @@
                     <div class="chart-container">
                         <canvas id="genderChart"></canvas>
                     </div>
+                    <p style="font-size: 0.8rem; color: #a0aec0; margin-top: 10px;">* 13 registros pendientes de validación de datos del menor.</p>
                 </div>
             </div>
 
-            <!-- CARDS POR CATEGORÍA -->
+            <!-- CARDS POR CATEGORÍA (MATEMÁTICA EXACTA) -->
             <div class="cat-grid">
                 <div class="cat-card verde">
                     <div class="cat-header">
                         <span class="cat-title" style="color: var(--verde);">VERDE (4 a 6 años)</span>
                         <span class="cat-count">172</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 100m • 31% del total</p>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 100m • 30.3% del total</p>
                     <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
-                        👦 97 Niños | 👧 71 Niñas
+                        👦 97 Niños | 👧 71 Niñas | 📝 4 Por validar
                     </div>
                 </div>
 
@@ -531,9 +472,9 @@
                         <span class="cat-title" style="color: #a855f7;">MORADO (11 a 13 años)</span>
                         <span class="cat-count">127</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 800m • 23% del total</p>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 800m • 22.4% del total</p>
                     <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
-                        👦 68 Niños | 👧 56 Niñas
+                        👦 68 Niños | 👧 56 Niñas | 📝 3 Por validar
                     </div>
                 </div>
 
@@ -542,9 +483,9 @@
                         <span class="cat-title" style="color: var(--amarillo);">AMARILLO (7 a 8 años)</span>
                         <span class="cat-count">113</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 200m • 20% del total</p>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 200m • 19.9% del total</p>
                     <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
-                        👦 52 Niños | 👧 59 Niñas
+                        👦 52 Niños | 👧 59 Niñas | 📝 2 Por validar
                     </div>
                 </div>
 
@@ -553,9 +494,9 @@
                         <span class="cat-title" style="color: var(--rojo);">ROJO (9 a 10 años)</span>
                         <span class="cat-count">104</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 400m • 19% del total</p>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 400m • 18.3% del total</p>
                     <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
-                        👦 52 Niños | 👧 50 Niñas
+                        👦 52 Niños | 👧 50 Niñas | 📝 2 Por validar
                     </div>
                 </div>
 
@@ -564,9 +505,9 @@
                         <span class="cat-title" style="color: var(--verde);">VERDE JUVENIL (13 a 15 años)</span>
                         <span class="cat-count">52</span>
                     </div>
-                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 1,600m • 9% del total</p>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 1,600m • 9.2% del total</p>
                     <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
-                        👦 24 Niños | 👧 26 Niñas
+                        👦 24 Niños | 👧 26 Niñas | 📝 2 Por validar
                     </div>
                 </div>
             </div>
@@ -598,7 +539,7 @@
                     CONSULTA TU NÚMERO DE FOLIO 🎟️
                 </h3>
                 <p style="font-size: 0.88rem; margin-bottom: 20px; color: #555;">
-                    Ingresa tu correo electrónico o teléfono registrado para consultar tu folio oficial de corredor. (Exclusivo para participantes confirmados).
+                    Ingresa tu correo electrónico o teléfono registrado para consultar tu folio oficial. (Exclusivo para participantes confirmados).
                 </p>
                 
                 <input type="text" id="queryInput" class="cert-input" placeholder="Ingresa Correo o Teléfono registrado">
@@ -614,37 +555,40 @@
         <!-- 📸 GALERÍA DE EVENTOS ANTERIORES -->
         <section id="galeria" class="eventos-anteriores">
             <h3>Eventos Anteriores 🏅</h3>
-            
             <div class="galeria-grid">
                 <div class="card-evento">
                     <img src="https://raw.githubusercontent.com/EdddGaar/pk26/447539ec1788875af1ad4cef40631cd665138b77/Collage.png" alt="Día de Muertos 2025">
                 </div>
-
                 <div class="card-evento">
                     <img src="https://raw.githubusercontent.com/EdddGaar/pk26/447539ec1788875af1ad4cef40631cd665138b77/collage%202.png" alt="Peque Recorre Infantil Abril 2026">
                 </div>
-
                 <div class="card-evento">
                     <img src="https://raw.githubusercontent.com/EdddGaar/pk26/447539ec1788875af1ad4cef40631cd665138b77/Collage%203.png" alt="Pet Recorre 2026">
                 </div>
             </div>
         </section>
 
+        <!-- ℹ️ INFORMACIÓN Y DATOS AGREGADOS (SIN PII) -->
         <div class="info-grid" id="info">
             <div class="support-card">
                 <h4>📍 Sede y Horario de Cita</h4>
                 <p>Pista de Atletismo del IMSS, Toluca. Cita a las <strong>07:45 AM</strong> para realizar check-in y entrega de paquete.</p>
-                <a href="https://maps.app.goo.gl/cvY5Ww96RY5QoWSQ9" target="_blank" class="map-btn">
-                    VER EN GOOGLE MAPS 🗺️
-                </a>
+                <a href="https://maps.app.goo.gl/cvY5Ww96RY5QoWSQ9" target="_blank" class="map-btn">VER EN GOOGLE MAPS 🗺️</a>
             </div>
+            
+            <div class="support-card" style="border-bottom-color: var(--verde);">
+                <h4>♿ Compromiso con la Inclusión</h4>
+                <p>Contamos con <strong>7 participantes</strong> con necesidades especiales reportadas (TDAH, Autismo, Discapacidad Auditiva). Nuestro equipo en la ruta estará atento para brindar el apoyo y las adaptaciones necesarias.</p>
+            </div>
+
             <div class="support-card" style="border-bottom-color: var(--naranja);">
+                <h4>👨‍👩‍👧‍👦 Espíritu Familiar</h4>
+                <p>¡Gracias a las familias que corren juntas! Tenemos tutores con hasta <strong>10 participantes</strong> inscritos, y más de 15 familias con 3 o más peques compartiendo la misma carrera.</p>
+            </div>
+
+            <div class="support-card" style="border-bottom-color: var(--azul);">
                 <h4>📧 Correo de Confirmación</h4>
                 <p>Los participantes registrados recibieron un correo oficial desde <strong>noreply@recorre.club</strong> con su folio y pase digital directo a su Inbox.</p>
-            </div>
-            <div class="support-card" style="border-bottom-color: var(--verde);">
-                <h4>💬 Asistencia Directa</h4>
-                <p>Escribe al bot de WhatsApp las 24 hrs para solucionar dudas sobre categorías, distancias o consultar tu folio.</p>
             </div>
         </div>
 
@@ -717,7 +661,7 @@
                 }
             });
 
-            // Gráfica de Barras de Género (SIN "EN PROCESO")
+            // Gráfica de Barras de Género (Solo Niños y Niñas confirmados, sin "En proceso")
             const ctxGender = document.getElementById('genderChart').getContext('2d');
             new Chart(ctxGender, {
                 type: 'bar',
