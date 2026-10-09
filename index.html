@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tu Peque Re-Corre Calaveritas de Azúcar 2026 | Sitio Oficial</title>
+    <title>Tu Peque Re-Corre Calaveritas de Azúcar 2026 | Estadísticas Oficiales</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,8 +16,10 @@
             --morado: #8E44AD;
             --verde: #27AE60;
             --amarillo: #F1C40F;
+            --rojo: #E74C3C;
             --fondo: #0d0f12;
             --card-bg: rgba(255, 255, 255, 0.96);
+            --card-dark: rgba(26, 28, 35, 0.85);
             --fb-blue: #1877F2;
             --whatsapp: #25D366;
             --shadow: 0 20px 50px rgba(0,0,0,0.3);
@@ -112,6 +114,125 @@
             line-height: 1.1;
         }
 
+        .badge-closed {
+            display: inline-block;
+            background: rgba(233, 78, 27, 0.2);
+            border: 1px solid var(--naranja);
+            color: var(--naranja);
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        /* 📊 DASHBOARD & STATS STYLING */
+        .stats-section {
+            margin: 40px auto;
+            max-width: 1000px;
+        }
+
+        .main-stat-card {
+            background: linear-gradient(135deg, rgba(142, 68, 173, 0.25) 0%, rgba(29, 113, 184, 0.25) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 35px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .main-stat-number {
+            font-size: clamp(3.5rem, 8vw, 5.5rem);
+            font-weight: 900;
+            color: var(--amarillo);
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(241, 196, 15, 0.3);
+        }
+
+        .gender-bar-container {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            height: 24px;
+            overflow: hidden;
+            display: flex;
+            margin: 20px 0 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .gender-boys { background: var(--azul); height: 100%; transition: width 1s ease; }
+        .gender-girls { background: #E91E63; height: 100%; transition: width 1s ease; }
+        .gender-inc { background: #7f8c8d; height: 100%; transition: width 1s ease; }
+
+        .gender-legend {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .cat-card {
+            background: var(--card-dark);
+            border-radius: 22px;
+            padding: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .cat-card:hover { transform: translateY(-5px); }
+
+        .cat-card.verde { border-top: 5px solid var(--verde); }
+        .cat-card.morado { border-top: 5px solid var(--morado); }
+        .cat-card.amarillo { border-top: 5px solid var(--amarillo); }
+        .cat-card.rojo { border-top: 5px solid var(--rojo); }
+
+        .cat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .cat-title { font-weight: 900; font-size: 1.1rem; }
+        .cat-count { font-size: 1.8rem; font-weight: 900; color: #fff; }
+
+        .detail-table-card {
+            background: var(--card-dark);
+            border-radius: 25px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 30px;
+        }
+
+        .age-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .age-item {
+            background: rgba(255,255,255,0.04);
+            padding: 10px 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .age-item span { font-weight: 900; color: var(--amarillo); display: block; font-size: 1.2rem; }
+
         .countdown-container {
             display: flex;
             justify-content: center;
@@ -196,43 +317,6 @@
             box-shadow: 0 12px 25px rgba(142, 68, 173, 0.3);
         }
         .cert-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(142, 68, 173, 0.4); }
-
-        .btn-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .web-reg-btn {
-            background: linear-gradient(135deg, var(--naranja) 0%, #ff7c52 100%);
-            color: white;
-            text-decoration: none;
-            padding: 16px 25px;
-            border-radius: 50px;
-            font-weight: 900;
-            display: block;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(233, 78, 27, 0.3);
-        }
-        .web-reg-btn:hover { transform: translateY(-3px); }
-
-        .wa-direct-btn {
-            background: linear-gradient(135deg, var(--verde) 0%, #2ecc71 100%);
-            color: white;
-            text-decoration: none;
-            padding: 16px 25px;
-            border-radius: 50px;
-            font-weight: 900;
-            display: block;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
-        }
-        .wa-direct-btn:hover { transform: translateY(-3px); }
 
         /* 📸 GALERÍA LIMPIA DE EVENTOS ANTERIORES */
         .eventos-anteriores {
@@ -355,7 +439,7 @@
             <img src="https://raw.githubusercontent.com/EdddGaar/pk26/a88ad74e221f1707b77eb548878cdff8587ffa1b/Re%20corre%20Logo.jpg" alt="Re Corre Logo" class="nav-logo">
         </a>
         <div class="nav-links">
-            <a href="registro.html">Inscripción Web</a>
+            <a href="#stats">Estadísticas</a>
             <a href="#buscar">Consultar Folio</a>
             <a href="#galeria">Eventos Anteriores</a>
             <a href="#info">Sede & Ruta</a>
@@ -365,6 +449,7 @@
     <main style="max-width: 1100px; margin: auto; padding: 0 15px;">
         
         <section class="hero parallax-layer" data-speed="0.05">
+            <div class="badge-closed">🚫 INSCRIPCIONES CERRADAS - CUPO LLENO</div>
             <img src="https://raw.githubusercontent.com/EdddGaar/pk26/ac26029600cee534b5388b1c495cb11f466e2fa5/mmail.png" alt="Banner Tu Peque Re-Corre 2026" class="banner">
             <h2 class="section-title">CALAVERITAS DE AZÚCAR 2026</h2>
             <p style="margin-top: 10px; font-weight: 700; color: #cbd5e1; letter-spacing: 1px;">
@@ -391,33 +476,128 @@
             </div>
         </section>
 
+        <!-- 📊 DASHBOARD DE CIFRAS E INSCRITOS -->
+        <section id="stats" class="stats-section parallax-layer" data-speed="0.03">
+            <div class="main-stat-card">
+                <h3 style="text-transform: uppercase; letter-spacing: 2px; font-size: 1rem; color: #cbd5e1;">Padrón Oficial de Participantes</h3>
+                <div class="main-stat-number">568</div>
+                <p style="font-weight: 700; font-size: 1.1rem; color: #fff;">PEQUES LISTOS PARA CORRER 🏃‍♂️🏃‍♀️</p>
+                
+                <div class="gender-bar-container">
+                    <div class="gender-boys" style="width: 51.6%;" title="Niños: 51.6%"></div>
+                    <div class="gender-girls" style="width: 46.1%;" title="Niñas: 46.1%"></div>
+                    <div class="gender-inc" style="width: 2.3%;" title="Incompletos: 2.3%"></div>
+                </div>
+                <div class="gender-legend">
+                    <span style="color: var(--azul);">👦 293 Niños (51.6%)</span>
+                    <span style="color: #E91E63;">👧 262 Niñas (46.1%)</span>
+                    <span style="color: #a0aec0;">📝 13 En proceso de validación (2.3%)</span>
+                </div>
+            </div>
+
+            <!-- CARDS POR CATEGORÍA -->
+            <div class="cat-grid">
+                <div class="cat-card verde">
+                    <div class="cat-header">
+                        <span class="cat-title" style="color: var(--verde);">VERDE (4 a 6 años)</span>
+                        <span class="cat-count">172</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 100m • 30.3% del total</p>
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
+                        👦 97 Niños | 👧 71 Niñas
+                    </div>
+                </div>
+
+                <div class="cat-card morado">
+                    <div class="cat-header">
+                        <span class="cat-title" style="color: #a855f7;">MORADO (11 a 13 años)</span>
+                        <span class="cat-count">127</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 800m • 22.4% del total</p>
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
+                        👦 68 Niños | 👧 56 Niñas
+                    </div>
+                </div>
+
+                <div class="cat-card amarillo">
+                    <div class="cat-header">
+                        <span class="cat-title" style="color: var(--amarillo);">AMARILLO (7 a 8 años)</span>
+                        <span class="cat-count">113</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 200m • 19.9% del total</p>
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
+                        👦 52 Niños | 👧 59 Niñas
+                    </div>
+                </div>
+
+                <div class="cat-card rojo">
+                    <div class="cat-header">
+                        <span class="cat-title" style="color: var(--rojo);">ROJO (9 a 10 años)</span>
+                        <span class="cat-count">104</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 400m • 18.3% del total</p>
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
+                        👦 52 Niños | 👧 50 Niñas
+                    </div>
+                </div>
+
+                <div class="cat-card verde" style="grid-column: 1 / -1;">
+                    <div class="cat-header">
+                        <span class="cat-title" style="color: var(--verde);">VERDE JUVENIL (13 a 15 años)</span>
+                        <span class="cat-count">52</span>
+                    </div>
+                    <p style="font-size: 0.85rem; color: #a0aec0; font-weight: 700;">Distancia: 1,600m • 9.2% del total</p>
+                    <div style="margin-top: 10px; font-size: 0.8rem; color: #cbd5e1;">
+                        👦 24 Niños | 👧 26 Niñas
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESGLOSE POR EDAD Y ATENCIÓN INCLUSIVA -->
+            <div class="detail-table-card">
+                <h4 style="color: var(--amarillo); font-size: 1.2rem; margin-bottom: 10px;">🎂 Distribución Exacta por Edad Individual</h4>
+                <div class="age-grid">
+                    <div class="age-item"><span>62</span> 4 años</div>
+                    <div class="age-item"><span>47</span> 5 años</div>
+                    <div class="age-item"><span>63</span> 6 años</div>
+                    <div class="age-item"><span>65</span> 7 años</div>
+                    <div class="age-item"><span>48</span> 8 años</div>
+                    <div class="age-item"><span>54</span> 9 años</div>
+                    <div class="age-item"><span>50</span> 10 años</div>
+                    <div class="age-item"><span>56</span> 11 años</div>
+                    <div class="age-item"><span>37</span> 12 años</div>
+                    <div class="age-item"><span>34</span> 13 años</div>
+                    <div class="age-item"><span>32</span> 14 años</div>
+                    <div class="age-item"><span>20</span> 15 años</div>
+                </div>
+            </div>
+
+            <div class="detail-table-card" style="border-left: 5px solid var(--azul);">
+                <h4 style="color: var(--azul); font-size: 1.2rem; margin-bottom: 8px;">🤝 Deporte Inclusivo & Familias Re-Corre</h4>
+                <p style="font-size: 0.88rem; color: #cbd5e1; margin-bottom: 12px;">
+                    • <strong>Atención e Inclusión Especial:</strong> Contaremos con la participación de <strong>7 peques</strong> con apoyo personalizado para garantizar su carrera.
+                </p>
+                <p style="font-size: 0.88rem; color: #cbd5e1;">
+                    • <strong>Compromiso Familiar Destacado:</strong> Reconocimiento especial a las familias con mayor número de inscritos registrados (Tutores: Vianca B. A. con 10 peques; Alejandro F. F., César D., Ana L. T., Elizabeth D. M., Carolina B. Q. con 4 peques c/u; Mariela G. V., Mirella C. G., Norma L. A., César A. R. con 3 peques c/u).
+                </p>
+            </div>
+        </section>
+
+        <!-- 🔍 CONSULTA DE FOLIOS -->
         <section id="buscar" class="parallax-layer" data-speed="0.02">
             <div class="cert-container">
                 <h3 style="margin-bottom: 10px; font-weight: 900; color: var(--morado); font-size: 1.5rem;">
                     CONSULTA TU NÚMERO DE FOLIO 🎟️
                 </h3>
                 <p style="font-size: 0.88rem; margin-bottom: 20px; color: #555;">
-                    Ingresa tu correo electrónico, teléfono (10 dígitos) o nombre del participante para recuperar tu folio de inscripción.
+                    Ingresa tu correo electrónico registrado o teléfono a 10 dígitos para consultar tu folio oficial de corredor.
                 </p>
                 
-                <input type="text" id="queryInput" class="cert-input" placeholder="Correo, Teléfono o Nombre">
+                <input type="text" id="queryInput" class="cert-input" placeholder="Ingresa Correo o Teléfono (10 dígitos)">
                 
                 <button onclick="buscarRegistro()" id="btnBuscar" class="cert-btn">
                     BUSCAR MI FOLIO 🔍
                 </button>
-
-                <div style="margin: 25px 0 15px; font-size: 0.8rem; color: #777; font-weight: 700;">
-                    — REGISTRO DE PARTICIPANTES —
-                </div>
-
-                <div class="btn-grid">
-                    <a href="registro.html" class="web-reg-btn">
-                        FORMULARIO WEB 📝
-                    </a>
-                    <a href="https://wa.me/525534421722?text=Inscribirme" target="_blank" class="wa-direct-btn">
-                        WHATSAPP BOT 📱
-                    </a>
-                </div>
                 
                 <div id="msg-status"></div>
             </div>
@@ -452,7 +632,7 @@
             </div>
             <div class="support-card" style="border-bottom-color: var(--naranja);">
                 <h4>📧 Correo Transaccional</h4>
-                <p>Al inscribirte recibes un correo oficial desde <strong>noreply@recorre.club</strong> con tu folio y pase digital directo a tu Inbox.</p>
+                <p>Al inscribirte recibiste un correo oficial desde <strong>noreply@recorre.club</strong> con tu folio y pase digital directo a tu Inbox.</p>
             </div>
             <div class="support-card" style="border-bottom-color: var(--verde);">
                 <h4>💬 Asistencia Directa</h4>
@@ -502,7 +682,7 @@
         setInterval(updateCountdown, 1000);
         updateCountdown();
 
-        // 🔍 CONSULTA DE FOLIOS EN TIEMPO REAL
+        // 🔍 CONSULTA DE FOLIOS EN TIEMPO REAL (PROTECCIÓN DE DATOS APLICADA)
         async function buscarRegistro() {
             const queryInput = document.getElementById('queryInput');
             const btn = document.getElementById('btnBuscar');
@@ -511,7 +691,7 @@
 
             const queryVal = queryInput.value.trim();
             if (queryVal.length < 3) {
-                msg.innerHTML = "<span style='color:var(--naranja); background:rgba(233,78,27,0.1); padding:8px 15px; border-radius:10px; display:inline-block;'>⚠️ Ingresa al menos 3 caracteres (Correo, Teléfono o Nombre).</span>";
+                msg.innerHTML = "<span style='color:var(--naranja); background:rgba(233,78,27,0.1); padding:8px 15px; border-radius:10px; display:inline-block;'>⚠️ Ingresa al menos 3 caracteres de tu correo o teléfono.</span>";
                 return;
             }
 
@@ -529,13 +709,16 @@
                         <h4 style="margin-bottom:12px; text-align:center; color:#15803d; font-size:1.1rem;">✅ ¡Registro(s) Encontrado(s)!</h4>`;
                     
                     result.data.forEach(item => {
+                        // Formatear primer nombre únicamente para protección de menor
+                        const nombreCompleto = (item.nombre || 'N/A').trim().split(' ');
+                        const primerNombre = nombreCompleto[0] || 'Peque';
+
                         htmlList += `
                             <div style="background:white; padding:15px; border-radius:14px; margin-bottom:12px; border:1px solid #dcfce7; color:#333; box-shadow:0 4px 10px rgba(0,0,0,0.03);">
                                 <div style="font-size:1.2rem; font-weight:900; color:#c0392b; margin-bottom:5px;">
                                     FOLIO: ${item.folio || 'PEQUE-REGISTRADO'}
                                 </div>
-                                <strong>Participante:</strong> ${item.nombre || 'N/A'}<br>
-                                <strong>Tutor:</strong> ${item.tutor || 'N/A'}<br>
+                                <strong>Participante:</strong> ${primerNombre} 🏃<br>
                                 <strong>Categoría / Distancia:</strong> ${item.categoria || ''} ${item.distancia ? '(' + item.distancia + ')' : ''}<br>
                                 <div style="margin-top:8px; font-size:0.8rem; color:#666;">
                                     📍 Sede: Pista del IMSS Toluca • Cita: 07:45 AM
@@ -549,7 +732,7 @@
                 } else {
                     msg.innerHTML = `<div style="background:#fff5f5; padding:15px; border-radius:15px; color:#c0392b; border:1px solid #fed7d7; margin-top:15px;">
                         ⚠️ No se encontraron folios asociados a "<strong>${queryVal}</strong>".<br>
-                        <small style="color:#718096;">Revisa la ortografía o consulta directamente por WhatsApp.</small>
+                        <small style="color:#718096;">Asegúrate de ingresar el correo o teléfono exacto con el que hiciste el registro.</small>
                     </div>`;
                 }
             } catch (error) {
